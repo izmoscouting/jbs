@@ -35,7 +35,7 @@ def login_user(request):
             return redirect('login')
         
     else:
-        return render(request, 'login.html', {})
+        return render(request, 'core/login.html', {})
 
 def logout_user(request):
     logout(request)
@@ -59,7 +59,7 @@ def register_user(request):
             messages.success(request, ("Réessayez"))
             return redirect('register')
     else:
-        return render(request, 'register.html', {'form':form})
+        return render(request, 'core/register.html', {'form':form})
     
 
 
