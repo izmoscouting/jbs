@@ -16,7 +16,7 @@ def method_login_required(method):
     return method_decorator(login_required, name=method)
 
 def home(request):
-    return render(request, 'home.html', {})
+    return render(request, 'core/home.html', {})
 
 def login_user(request):
     if request.method == "POST":
@@ -65,7 +65,7 @@ def register_user(request):
 
 @login_required()
 def access(request):
-    return render(request, 'access.html', {})
+    return render(request, 'core/access.html', {})
 
 @login_required()
 def clubs(request):
@@ -74,7 +74,7 @@ def clubs(request):
 
     for club in cleub:
         unique_club.add(club.Club)
-    return render(request, 'clubs.html', {'clubs':cleub})
+    return render(request, 'core/clubs.html', {'clubs':cleub})
 
 @login_required()
 def mercato(request):
@@ -83,7 +83,7 @@ def mercato(request):
 
     for player in playas:
         unique_positions.add(player.position)
-    return render(request, 'mercato.html',{'players' : playas, 'positions':unique_positions})
+    return render(request, 'core/mercato.html',{'players' : playas, 'positions':unique_positions})
 
 
 
@@ -91,7 +91,7 @@ def mercato(request):
 @method_login_required('dispatch')
 class PlayerAddWizard(SessionWizardView):
     form_list = [PlayerAdd1, PlayerAdd2, PlayerAdd3]
-    template_name = 'add_player.html'
+    template_name = 'core/add_player.html'
 
     @login_required()
     def done(self, form_list, **kwargs):
@@ -105,7 +105,7 @@ class PlayerAddWizard(SessionWizardView):
         player = Player(**form_data)
         player.save()  # Sauvegardez l'instance dans la base de données
         
-        return HttpResponseRedirect('/add_player?submitted=True')
+        return HttpResponseRedirect('core/add_player?submitted=True')
 
 @login_required()
 def club(request,pk):
@@ -113,7 +113,7 @@ def club(request,pk):
     playas = Player.objects.filter(club_id=pk)
     busi = Business.objects.filter(club_id=pk)
 
-    return render(request, 'club.html',{'club':cloub,'players':playas, 'Business':busi})
+    return render(request, 'core/club.html',{'club':cloub,'players':playas, 'Business':busi})
 
 """def add_player(request):
     submitted = False

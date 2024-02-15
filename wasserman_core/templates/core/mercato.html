@@ -1,4 +1,4 @@
-{% extends 'base_club.html' %} {% load static %} {{ players }} {{ Business }} {% block content %} 
+{% extends 'core/base_table.html' %} {% load static %} {{ players }} {% block content %} 
 <div id="layoutSidenav">
   <div id="layoutSidenav_nav">
     <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
@@ -62,7 +62,7 @@
   </div>
   <div id="layoutSidenav_content" class="bg-light py-5">
     <div class="container">
-      <h1>Détail du Club</h1>
+      <h1>Joueurs</h1>
       <div class="row mb-2">
         <div class="col-md-6">
           <input
@@ -71,45 +71,50 @@
             class="form-control"
             placeholder="Rechercher..."
           />
+        </br>
+          <div class="col-md-6 text-right">
+            <a class="btn btn-primary btn-sm" href="{% url 'add-player' %}" target="'_blank" role="button">Ajouter un joueur</a> <!-- Utilisez btn-sm pour rapetisser le bouton -->
+          </div>
         </div>
         <!-- Champ de filtrage par âge -->
       </div>
-      <table class="table table-striped" id="dataTableClubs">
+      <table class="table table-striped" id="dataTableJoueurs">
         <thead>
           <tr>
-            <th onclick="sortTable(0)">Joueur</th>
+            <th onclick="sortTable(0)">Name</th>
+            <th onclick="sortTable(1)">Poste</th>
+            <th onclick="sortTable(2)">Autre Poste</th>
+            <th onclick="sortTable(3)">Club</th>
+            <th onclick="sortTable(4)">Système Préférentiels</th>
+            <th onclick="sortTable(5)">Né en</th>
+            <th onclick="sortTable(6)">Note Actuelle</th>
+            <th onclick="sortTable(7)">Note Potentielle</th>
+            <th onclick="sortTable(8)">Note Financière</th>
+            <th onclick="sortTable(9)">Note Totale</th>
+            <th onclick="sortTable(10)">FDC</th>
+            <th onclick="sortTable(11)">Salaire</th>
           </tr>
         </thead>
         <tbody>
           <!-- Vos données vont ici -->
           {% for player in players %}
           <tr>
-            <td style="display: flex; justify-content: space-between;">
-                <span>{{ player }}</span>
-                <a class="btn btn-primary btn-sm" href="{% url 'add-player' %}" target="_blank" role="button">Supprimer</a>
-            </td>
+            <td>{{player.name}}</td>
+            <td>{{player.position}}</td>
+            <td>{{player.other_pos}}</td>
+            <td>{{player.club_id.Club}}</td>
+            <td>{{player.system}}</td>
+            <td>{{player.birth.year}}</td>
+            <td>{{player.note_actuel}}</td>
+            <td>{{player.potential}}</td>
+            <td>{{player.note_financ}}</td>
+            <td>{{player.note_tot}}</td>
+            <td>{{player.end_contract}}</td>
+            <td>{{player.wage}}</td>
           </tr>
           {% endfor %}
           <!-- Ajoutez plus de lignes de données ici -->
         </tbody>
-      </table>
-      <table class="table table-striped" id="dataTableClubs">
-        <thead>
-          <tr>
-            <th onclick="sortTable(0)">Demandes du club</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Vos données vont ici -->
-          {% for busi in Business %}
-          <tr>
-            <td><a>{{busi}}</a></td>
-            <td><a>{{busi}}</a></td>
-          </tr>
-          {% endfor %}
-          <!-- Ajoutez plus de lignes de données ici -->
-        </tbody>
-        </table>    
       </table>
     </div>
     <script>
