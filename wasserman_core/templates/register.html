@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<title>Inscription - JBS</title>
+
+<!-- Section: Design Block -->
+<section class="background-radial-gradient overflow-hidden d-flex align-items-center">
+    <style>
+      .background-radial-gradient {
+        background-color: hsl(25, 40%, 15%); /* le plus foncé */
+        background-image: radial-gradient(650px circle at 0% 0%,
+            hsl(25, 41%, 35%) 15%, /* le 5th plus foncé */
+            hsl(25, 41%, 30%) 35%, /* le 4thplus foncé */
+            hsl(25, 41%, 20%) 75%, /* le 3rdplus foncé */
+            hsl(25, 41%, 19%) 80%, /* le 2ndplus foncé */
+            transparent 100%),
+          radial-gradient(1250px circle at 100% 100%,
+            hsl(25, 41%, 45%) 15%,
+            hsl(25, 41%, 30%) 35%,
+            hsl(25, 41%, 20%) 75%,
+            hsl(25, 41%, 19%) 80%,
+            transparent 100%);
+            width: 100%;
+            height: 100vh;
+      }
+  
+      #radius-shape-1 {
+        height: 220px;
+        width: 220px;
+        top: -60px;
+        left: -130px;
+        background: radial-gradient(#6b0015, #ff711f);
+        overflow: hidden;
+      }
+  
+      #radius-shape-2 {
+        border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
+        bottom: -60px;
+        right: -110px;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(#6b0015, #ff711f);
+        overflow: hidden;
+      }
+  
+      .bg-glass {
+        background-color: hsla(0, 0%, 100%, 0.9) !important;
+        backdrop-filter: saturate(200%) blur(25px);
+      }
+
+    </style>
+  
+    <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
+      <div class="row gx-lg-5 align-items-center mb-5">
+        <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+          <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(25, 81%, 95%)">
+            Inscrivez-vous <br />
+            <span style="color: hsl(25, 81%, 75%)">& interagissez avec vos données</span>
+          </h1>
+        </div>
+  
+        <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
+          <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+          <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
+  
+          <div class="card bg-glass">
+            <div class="card-body px-4 py-5 px-md-5">
+            <form method="POST" action="{% url 'register' %}">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <br>
+                <button type="submit" class="btn btn-primary btn-block mb-4">
+                  Inscription
+                </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Section: Design Block -->
+
+{% endblock %}

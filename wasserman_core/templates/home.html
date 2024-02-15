@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<title>Accueil - JBS</title>
+        <!-- Masthead-->
+        <header class="masthead">
+            <div class="container px-4 px-lg-5 h-100">
+                <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
+                    <div class="col-lg-8 align-self-end">
+                        <h1 class="text-white font-weight-bold">JB Scouting</h1>
+                        <hr class="divider" />
+                    </div>
+                    <div class="col-lg-8 align-self-baseline">
+                        <p class="text-white-75 mb-5">Votre base de données vous accompagnant au quotidien! Retrouvez-ici les joueurs de votre agence et leurs profils pour répondre au mieux aux besoins de vos clubs partenaires</p>
+                        <a class="btn btn-primary btn-xl" href="#about">En Savoir +</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- About-->
+        <section class="page-section bg-primary" id="about">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-lg-8 text-center">
+                        <h2 class="text-white mt-0">C'est parti!</h2>
+                        <hr class="divider divider-light" />
+                        <p class="text-white-75 mb-4">C'est ici que tout commence. Connectez-vous pour suivre vos joueurs, en insérer de nouveau ou trouver le joueur répondant parfaitement au besoin d'un club!</p>
+                        <a class="btn btn-light btn-xl" href="{% url 'login' %}">Connectez-vous!</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Services-->
+        <section class="page-section" id="services">
+            <div class="container px-4 px-lg-3">
+                <h2 class="text-center mt-0">Ce qui vous attend</h2>
+                <hr class="divider" />
+                <div class="row gx-4 gx-lg-5">
+                    <div class="col-lg-5 col-md-6 text-center">
+                        <div class="mt-5">
+                            <div class="mb-2"><i class="bi-gem fs-1 text-primary"></i></div>
+                            <h3 class="h4 mb-2">Vos pepites</h3>
+                            <p class="text-muted mb-0">Ayez un oeil sur leur historique et leurs performances actuelles</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-7 col-md-6 text-center">
+                        <div class="mt-5">
+                            <div class="mb-2"><i class="bi-laptop fs-1 text-primary"></i></div>
+                            <h3 class="h4 mb-2">Données à jour</h3>
+                            <p class="text-muted mb-0">Les données sont continuellements rafraichies.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-11 col-md-6 text-center">
+                        <div class="mt-5">
+                            <div class="mb-2"><i class="bi-globe fs-1 text-primary"></i></div>
+                            <h3 class="h4 mb-2">Facile d'utilisation</h3>
+                            <p class="text-muted mb-0">Ergonomique, toutes les données sont faciles à trouver!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Portfolio-->
+        <div id="portfolio">
+            <div class="container-fluid p-0">
+                <div class="row g-0">
+                    <div class="col-lg-4 col-sm-6">
+                        <a class="portfolio-box" href="{% static  'assets/img/portfolio/fullsize/_1.jpg' %}" title="Max Lopez">
+                            <img class="img-fluid" src="{% static  'assets/img/portfolio/thumbnails/_1.jpg' %}" alt="..." />
+                            <div class="portfolio-box-caption">
+                                <div class="project-category text-white-50">Maxime Lopez</div>
+                                <div class="project-name">Parti de Sassuolo vers la Fiorentina cet été</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-4 col-sm-6">
+                        <a class="portfolio-box" href="{% static  'assets/img/portfolio/fullsize/_2.jpg' %}" title="Lesley">
+                            <img class="img-fluid" src="{% static  'assets/img/portfolio/thumbnails/_2.jpg' %}" alt="..." />
+                            <div class="portfolio-box-caption">
+                                <div class="project-category text-white-50">Lesley Ugochukwu</div>
+                                <div class="project-name">Parti de Rennes vers Chelsea cet été</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-4 col-sm-6">
+                        <a class="portfolio-box" href="{% static  'assets/img/portfolio/fullsize/_3.jpg' %}" title="Formose Mendy">
+                            <img class="img-fluid" src="{% static  'assets/img/portfolio/thumbnails/_3.jpg' %}" alt="..." />
+                            <div class="portfolio-box-caption">
+                                <div class="project-category text-white-50">Formose Mendy</div>
+                                <div class="project-name">Parti d'Amiens vers Lorient cet été</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Call to action-->
+        <section class="page-section bg-dark text-white">
+            <div class="container px-4 px-lg-5 text-center">
+                <h2 class="mb-4">Pas de compte? Pas de soucis!</h2>
+                <a class="btn btn-light btn-xl" href="https://startbootstrap.com/theme/creative/">Inscrivez-vous!</a>
+            </div>
+        </section>
+        <!-- Contact-->
+        <section class="page-section" id="contact">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-lg-8 col-xl-6 text-center">
+                        <h2 class="mt-0">Assistance</h2>
+                        <hr class="divider" />
+                        <p class="text-muted mb-5">Problème avec le site? Remplissez le formulaire et faites-le moi parvenir!</p>
+                    </div>
+                </div>
+                <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
+                    <div class="col-lg-6">
+                        <!-- * * * * * * * * * * * * * * *-->
+                        <!-- * * SB Forms Contact Form * *-->
+                        <!-- * * * * * * * * * * * * * * *-->
+                        <!-- This form is pre-integrated with SB Forms.-->
+                        <!-- To make this form functional, sign up at-->
+                        <!-- https://startbootstrap.com/solution/contact-forms-->
+                        <!-- to get an API token!-->
+                        <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+                            <!-- Name input-->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="name" type="text" placeholder="Enter your name..." data-sb-validations="required" />
+                                <label for="name">Nom Prénom</label>
+                                <div class="invalid-feedback" data-sb-feedback="name:required">Nom requis.</div>
+                            </div>
+                            <!-- Email address input-->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" />
+                                <label for="email">Email address</label>
+                                <div class="invalid-feedback" data-sb-feedback="email:required">Email requis.</div>
+                                <div class="invalid-feedback" data-sb-feedback="email:email">Email invalide.</div>
+                            </div>
+                            <!-- Phone number input-->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="phone" type="tel" placeholder="(07) 12 34 65 78" data-sb-validations="required" />
+                                <label for="phone">Phone number</label>
+                                <div class="invalid-feedback" data-sb-feedback="phone:required">Numéro requis.</div>
+                            </div>
+                            <!-- Message input-->
+                            <div class="form-floating mb-3">
+                                <textarea class="form-control" id="message" type="text" placeholder="Enter your message here..." style="height: 10rem" data-sb-validations="required"></textarea>
+                                <label for="message">Message</label>
+                                <div class="invalid-feedback" data-sb-feedback="message:required">Message requis.</div>
+                            </div>
+                            <!-- Submit success message-->
+                            <!---->
+                            <!-- This is what your users will see when the form-->
+                            <!-- has successfully submitted-->
+                            <div class="d-none" id="submitSuccessMessage">
+                                <div class="text-center mb-3">
+                                    <div class="fw-bolder">Mail envoyé!</div>
+                                    To activate this form, sign up at
+                                    <br />
+                                    <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                                </div>
+                            </div>
+                            <!-- Submit error message-->
+                            <!---->
+                            <!-- This is what your users will see when there is-->
+                            <!-- an error submitting the form-->
+                            <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
+                            <!-- Submit Button-->
+                            <div class="d-grid"><button class="btn btn-primary btn-xl disabled" id="submitButton" type="submit">Submit</button></div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-lg-4 text-center mb-5 mb-lg-0">
+                        <i class="bi-phone fs-2 mb-3 text-muted"></i>
+                        <div>+336 65 04 26 50</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+{% endblock %}

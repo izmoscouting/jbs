@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<title>Connexion - WSA</title>
+
+<!-- Section: Design Block -->
+<section class="background-radial-gradient overflow-hidden d-flex align-items-center">
+    <style>
+      .background-radial-gradient {
+        background-color: hsl(218, 41%, 15%);
+        background-image: radial-gradient(650px circle at 0% 0%,
+            hsl(218, 41%, 35%) 15%,
+            hsl(218, 41%, 30%) 35%,
+            hsl(218, 41%, 20%) 75%,
+            hsl(218, 41%, 19%) 80%,
+            transparent 100%),
+          radial-gradient(1250px circle at 100% 100%,
+            hsl(218, 41%, 45%) 15%,
+            hsl(218, 41%, 30%) 35%,
+            hsl(218, 41%, 20%) 75%,
+            hsl(218, 41%, 19%) 80%,
+            transparent 100%);
+            width: 100%;
+            height: 100vh;
+      }
+  
+      #radius-shape-1 {
+        height: 220px;
+        width: 220px;
+        top: -60px;
+        left: -130px;
+        background: radial-gradient(#44006b, #ad1fff);
+        overflow: hidden;
+      }
+  
+      #radius-shape-2 {
+        border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
+        bottom: -60px;
+        right: -110px;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(#44006b, #ad1fff);
+        overflow: hidden;
+      }
+  
+      .bg-glass {
+        background-color: hsla(0, 0%, 100%, 0.9) !important;
+        backdrop-filter: saturate(200%) blur(25px);
+      }
+
+      .custom-button-color {
+        background-color: #2819ca; /* Remplacez cette couleur par la couleur de votre choix (utilisez une valeur hexadécimale, RVB, ou un nom de couleur). */
+        color: #FFFFFF; /* Couleur du texte sur le bouton, peut également être personnalisée. */
+        display: block; /* Transformer le bouton en élément de bloc */
+        margin: 0 auto; /* Centre le bouton horizontalement */
+
+      }
+
+      .custom-button-color:hover {
+        background-color: #2f72e6; /* Couleur de survol du bouton, si nécessaire. */
+        /* Vous pouvez personnaliser cette couleur de survol également. */
+      }
+
+    </style>
+  
+    <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5 ">
+      <div class="row gx-lg-5 align-items-center mb-5">
+        <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+          <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)">
+            Accédez<br />
+            <span style="color: hsl(218, 81%, 75%)">à vos données</span>
+          </h1>
+        </div>
+  
+        <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
+          <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+          <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
+  
+          <div class="card bg-glass">
+            <div class="card-body px-4 py-5 px-md-5">
+              <form method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="form-outline mb-4">
+                  <input type="text" class="form-control" placeholder="Username" name="username"/>
+                </div>
+  
+                
+                <div class="form-outline mb-4">
+                  <input type="password" class="form-control" placeholder="Mot de Passe" name="password" />
+                </div>
+                
+                <br>
+                
+                <button type="submit" class="btn custom-button-color btn-block mb-4">
+                Connexion
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Section: Design Block -->
+  
+
+{% endblock %}

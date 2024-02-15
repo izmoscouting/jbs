@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block styles %}
+    <link href="{% static 'css/styles_access.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+        <!-- Masthead-->
+        <header class="stadium">
+            <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
+                <div class="d-flex justify-content-center">
+                    <div class="text-center">
+                        <h1 class="mx-auto my-0 text-uppercase">JB Scouting</h1>
+                        <h2 class="text-white-50 mx-auto mt-2 mb-5">L'accès à votre base de données, ici vous pourrez préparer le mercato et plein d'autres choses encore.</h2>
+                        <a class="btn btn-primary" href="#about">Débutez</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- About-->
+        <section class="about-section text-center" id="about">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-lg-8">
+                        <h2 class="text-white mb-4">Une Base de Données Complète</h2>
+                        <p class="text-white-50">
+                            Accédez aux données sur les joueurs, clubs, agents et scouts. Intégrez des données supplémentaires.
+                            <a href="#add_report">Importez vos derniers rapports sur les joueurs.</a>
+                            <br>En bref appropriez vous ce site web!
+                        </p>
+                    </div>
+                </div>
+                <img class="img-fluid" src="{% static 'assets/img/access/test.png' %}" alt="..." />
+            </div>
+        </section>
+        <!-- Projects-->
+        <section class="projects-section bg-light" id="projects">
+            <div class="container px-4 px-lg-5">
+                <!-- Featured Project Row-->
+                <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
+                    <a href="{% url 'mercato' %}"><div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src="{% static 'assets/img/access/mercato.jpg' %}" alt="..." /></a></div>
+                    <div class="col-xl-4 col-lg-5">
+                        <div class="featured-text text-center text-lg-left">
+                            <h4>Mercato</h4>
+                            <p class="text-black-50 mb-0">Préparez le mercato avec l'aide de votre moteur de recherche, réglez les options qui vous intéressent : du profil à l'âge en passant par la valeur tout y est.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Project One Row-->
+                <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
+                    <div class="col-lg-6"><img class="img-fluid" src="{% static 'assets/img/access/player.jpg' %}" alt="..." /></div>
+                    <div class="col-lg-6">
+                        <div class="bg-black text-center h-100 project">
+                            <div class="d-flex h-100">
+                                <div class="project-text w-100 my-auto text-center text-lg-left">
+                                    <h4 class="text-white">Joueurs</h4>
+                                    <p class="mb-0 text-white-50">Ici vous pourrez accéder à tous les joueurs présents dans la base de données, en ajouter de nouveaux et/ou mettre à jour si besoin.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Project Two Row-->
+                <div class="row gx-0 justify-content-center">
+                    <div class="col-lg-6"><img class="img-fluid" src="{% static 'assets/img/access/club.jpg' %}" alt="..." /></div>
+                    <div class="col-lg-6 order-lg-first">
+                        <div class="bg-black text-center h-100 project">
+                            <div class="d-flex h-100">
+                                <div class="project-text w-100 my-auto text-center text-lg-right">
+                                    <h4 class="text-white">Clubs</h4>
+                                    <p class="mb-0 text-white-50">Ici vous pourrez accéder à tous les clubs présents dans la base de données, en ajouter de nouveaux et/ou mettre à jour si besoin!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+{% block extrahead %}
+    <script src="{% static 'js/scripts_access.js' %}"></script>
+{% endblock %}
+
+{% endblock %}

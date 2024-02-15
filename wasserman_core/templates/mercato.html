@@ -1,0 +1,124 @@
+{% extends 'base_table.html' %} {% load static %} {{ players }} {% block content %} 
+<div id="layoutSidenav">
+  <div id="layoutSidenav_nav">
+    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+      <div class="sb-sidenav-menu">
+        <div class="nav">
+          <div class="sb-sidenav-menu-heading">Core</div>
+          <a class="nav-link" href="index.html">
+            <div class="sb-nav-link-icon">
+              <i class="fas fa-tachometer-alt"></i>
+            </div>
+            Accueil
+          </a>
+          <div class="sb-sidenav-menu-heading">Interface</div>
+          <a
+            class="nav-link collapsed"
+            href="#"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseLayouts"
+            aria-expanded="false"
+            aria-controls="collapseLayouts"
+          >
+            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+            Filtres
+            <div class="sb-sidenav-collapse-arrow">
+              <i class="fas fa-angle-down"></i>
+            </div>
+          </a>
+          <div
+            class="collapse"
+            id="collapseLayouts"
+            aria-labelledby="headingOne"
+            data-bs-parent="#sidenavAccordion"
+          >
+          <nav class="sb-sidenav-menu-nested nav">
+            <label for="ageFilter" class="form-label">Année de Naissance</label>
+            <div class="slider"><input type="range" min="1970" max="2010" value="1980" oninput="ageDisplay.innerText = this.value" id="ageFilter"><p id="ageDisplay">1980</p></div>
+            <label for="ratingFilter" class="form-label">Note</label>
+            <div class="slider"><input type="range" min="0" max="5" step="0.5" value="0" oninput="ratingDisplay.innerText = this.value" id="ratingFilter"><p id="ratingDisplay">-1</p></div>
+            <select id="positionFilter" class="form-select">
+              <option value="">Toutes les positions</option>
+              {% for position in positions %}
+              <option value="{{ position }}">{{ position }}</option>
+              <!-- Ajoutez plus d'options pour d'autres positions -->
+              {% endfor %}
+            </select>
+          </nav>
+          </div>
+          <a class="nav-link" href="charts.html">
+            <div class="sb-nav-link-icon">
+              <i class="fas fa-chart-area"></i>
+            </div>
+            Demandes
+          </a>
+          <a class="nav-link" href="tables.html">
+            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+            Tableaux
+          </a>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <div id="layoutSidenav_content" class="bg-light py-5">
+    <div class="container">
+      <h1>Joueurs</h1>
+      <div class="row mb-2">
+        <div class="col-md-6">
+          <input
+            type="text"
+            id="search"
+            class="form-control"
+            placeholder="Rechercher..."
+          />
+        </br>
+          <div class="col-md-6 text-right">
+            <a class="btn btn-primary btn-sm" href="{% url 'add-player' %}" target="'_blank" role="button">Ajouter un joueur</a> <!-- Utilisez btn-sm pour rapetisser le bouton -->
+          </div>
+        </div>
+        <!-- Champ de filtrage par âge -->
+      </div>
+      <table class="table table-striped" id="dataTableJoueurs">
+        <thead>
+          <tr>
+            <th onclick="sortTable(0)">Name</th>
+            <th onclick="sortTable(1)">Poste</th>
+            <th onclick="sortTable(2)">Autre Poste</th>
+            <th onclick="sortTable(3)">Club</th>
+            <th onclick="sortTable(4)">Système Préférentiels</th>
+            <th onclick="sortTable(5)">Né en</th>
+            <th onclick="sortTable(6)">Note Actuelle</th>
+            <th onclick="sortTable(7)">Note Potentielle</th>
+            <th onclick="sortTable(8)">Note Financière</th>
+            <th onclick="sortTable(9)">Note Totale</th>
+            <th onclick="sortTable(10)">FDC</th>
+            <th onclick="sortTable(11)">Salaire</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Vos données vont ici -->
+          {% for player in players %}
+          <tr>
+            <td>{{player.name}}</td>
+            <td>{{player.position}}</td>
+            <td>{{player.other_pos}}</td>
+            <td>{{player.club_id.Club}}</td>
+            <td>{{player.system}}</td>
+            <td>{{player.birth.year}}</td>
+            <td>{{player.note_actuel}}</td>
+            <td>{{player.potential}}</td>
+            <td>{{player.note_financ}}</td>
+            <td>{{player.note_tot}}</td>
+            <td>{{player.end_contract}}</td>
+            <td>{{player.wage}}</td>
+          </tr>
+          {% endfor %}
+          <!-- Ajoutez plus de lignes de données ici -->
+        </tbody>
+      </table>
+    </div>
+    <script>
+  </script>
+    {% endblock %}
+  </div>
+</div>
