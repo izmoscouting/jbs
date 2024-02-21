@@ -39,22 +39,99 @@ class SignUpForm(UserCreationForm):
           
 		
 # Sous-formulaire pour l'étape 1
-class PlayerAdd1(ModelForm):
+class PlayerAdd1(forms.ModelForm):
     class Meta:
         model = Player
-        fields = ('last_name', 'first_name','position', 'club_id')
-        help_texts = {
-            'club_id': 'Clic droit sur "Clubs" pour vérifier s\'il est dans la BDD. Ajoutez le s\'il manque',
+        fields = ('last_name', 'first_name', 'birth', 'position', 'other_pos', 'club_id', 'foot', 'size')
+        widgets = {
+            'birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
         }
+        labels = {
+            'last_name': 'Nom',
+            'first_name': 'Prénom',
+            'birth': 'Date de Naissance',
+            'position': 'Poste',
+            'other_pos': 'Autre Poste',
+            'club_id': 'Club',
+            'foot': 'Pied Fort',
+            'size': 'Taille',
+        }
+
+        help_texts = {'club_id':'Cliquez sur \'Clubs\' et rajoutez le si le club du joueur manque.'}
+
+    def __init__(self, *args, **kwargs):
+        super(PlayerAdd1, self).__init__(*args, **kwargs)
+        unique_positions = set(Player.objects.values_list('position', flat=True))
+        unique_positions = [(pos, pos) for pos in unique_positions if pos]  # Exclure les positions vides
+        unique_positions.sort(key=lambda x: x[1])
+        
+        # Appliquer les labels et les configurations définis dans Meta
+        self.fields['position'] = forms.ChoiceField(
+            label=self.Meta.labels['position'],
+            choices=unique_positions,
+            required=True,
+            widget=forms.Select(attrs={'class': 'form-control'})
+        )
+        self.fields['other_pos'] = forms.MultipleChoiceField(
+            label=self.Meta.labels['other_pos'],
+            choices=unique_positions,
+            required=False,
+            widget=forms.SelectMultiple(attrs={'class': 'form-control'})
+        )
+        unique_foots = set(Player.objects.values_list('foot', flat=True))
+        unique_foots = [(foo, foo) for foo in unique_foots if foo]
+        unique_foots.sort(key=lambda x: x[1])
+        
+        self.fields['foot'] = forms.ChoiceField(
+            label=self.Meta.labels['foot'],
+            choices=unique_foots,
+            required=True,
+            widget=forms.Select(attrs={'class': 'form-control'})
+        )
+
 
 # Sous-formulaire pour l'étape 2
 class PlayerAdd2(ModelForm):
     class Meta:
         model = Player
-        fields = ('size', 'birth', 'other_pos', 'agent')
+        fields = ('system','end_contract', 'wage','situation','comment','move_cond', 'end_mand')
+        labels = {
+             'system':'Formation',
+             'end_contract':'Fin de Contrat',
+             'wage':'Salaire',
+             'situation':'Situation',
+             'comment':'Commentaires',
+             'move_cond':'Condition Départ',
+             'end_mand':'Fin du Mandat'
+        }
+
+        widgets = {
+            'end_contract': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+        }
+
+        help_texts = {'comment':'Décrivez le joueur en mots clés, ex:\'Créatif, Rapide, Finisseur...\'',
+                      'situation':'Inconnu ou Dispo pour un prêt/transfert',
+                      'system':'4-4-2;4-3-3...',
+                      'end_contract':'Mettre 31/12/1899 si vous ne connaissez pas la date de fin',
+                      'move_cond':'Ajoutez des précisions sur un potentiel départ si vous en possédez'}
 
 # Sous-formulaire pour l'étape 3
 class PlayerAdd3(ModelForm):
     class Meta:
         model = Player
-        fields = ('system', 'end_contract', 'wage', 'situation', 'comment', 'foot', 'date_prop', 'move_cond', 'end_mand', 'transfermarkt', 'champ', 'phone', 'agence_id', 'potential', 'note_actuel', 'release', 'note_financ')
+        fields = ( 'transfermarkt', 'phone', 'agence_id', 'potential', 'note_actuel', 'note_financ', 'release')
+
+        widgets = {
+            'phone': forms.NumberInput(attrs={'class': 'form-control'})
+        }
+
+        help_texts = {'agence_id':'Cliquez sur \'Agence\' et rajoutez la si l\'agence du joueur manque.'}
+
+        labels = {
+             'phone':'Telephone',
+             'agence_id':'Agence',
+             'potential':'Note Potentielle',
+             'note_actuel':'Note Actuelle',
+             'note_financ':'Note Financière',
+             'release':'Clause Libératoire'
+        }

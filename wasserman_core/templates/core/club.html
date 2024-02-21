@@ -78,15 +78,25 @@
         <thead>
           <tr>
             <th onclick="sortTable(0)">Joueur</th>
+            <th onclick="sortTable(1)">Profil créé en</th>
           </tr>
         </thead>
         <tbody>
           <!-- Vos données vont ici -->
           {% for player in players %}
           <tr>
-            <td style="display: flex; justify-content: space-between;">
-                <span>{{ player }}</span>
-                <a class="btn btn-primary btn-sm" href="{% url 'add-player' %}" target="_blank" role="button">Supprimer</a>
+            <td>
+                {{ player }}
+            </td>
+            <td>
+              {{ player.created_time}}
+            </td>
+            <td>
+              {{ player.created_by }}
+            </td>
+            <td class="text-right">
+              <a class="btn btn-warning btn-sm" href="{% url 'update_player' player.id %}" role="button">Modifier</a>
+              <a class="btn btn-danger btn-sm" href="{% url 'delete_player' player.id %}" role="button">Supprimer</a>
             </td>
           </tr>
           {% endfor %}

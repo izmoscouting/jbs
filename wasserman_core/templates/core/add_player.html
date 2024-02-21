@@ -1,4 +1,5 @@
 {% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
 
 <title>Ajouter Joueur - JBS</title>
@@ -69,33 +70,24 @@
   
           <div class="card bg-glass">
             <div class="card-body px-4 py-5 px-md-5">
-            {% if submitted %}
+              <form method="POST" action="">
+                  {% csrf_token %}
+                  {{ wizard.management_form }}
+                  {% if wizard.form.forms %}
+                      {{ wizard.form.management_form }}
+                      {% for form in wizard.form.forms %}
+                          {{ form|crispy }}
+                      {% endfor %}
+                  {% else %}
+                      {{ wizard.form|crispy}}
+                  {% endif %}
 
-            Joueur ajouté dans la BDD
-
-
-            {% else %}
-
-            
-                <form method="POST" action="">
-                    {% csrf_token %}
-                    {{ wizard.management_form }}
-                    {% if wizard.form.forms %}
-                        {{ wizard.form.management_form }}
-                        {% for form in wizard.form.forms %}
-                            {{ form.as_p }}
-                        {% endfor %}
-                    {% else %}
-                        {{ wizard.form.as_p }}
-                    {% endif %}
-
-                    <br>
-                    <button type="submit" class="btn btn-primary btn-block mb-4">
-                    Ajouter
-                    </button>
+                  <br>
+                  <button type="submit" class="btn btn-primary btn-block mb-4">
+                  Ajouter
+                  </button>
                 </div>
               </form>
-            {% endif %}
             </div>
           </div>
         </div>
@@ -103,5 +95,16 @@
     </div>
   </section>
   <!-- Section: Design Block -->
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+  $("#id_0-club_id").select2()
+  $("#id_0-other_pos").select2()
+  $("#id_0-position").select2()
+  $("#id_2-agence_id").select2();
+</script>
 
 {% endblock %}

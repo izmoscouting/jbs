@@ -102,7 +102,7 @@
             <td>{{player.name}}</td>
             <td>{{player.position}}</td>
             <td>{{player.other_pos}}</td>
-            <td>{{player.club_id.Club}}</td>
+            <td><a href="{% url 'club' player.club_id.id %}">{{player.club_id.Club}}</a></td>
             <td>{{player.system}}</td>
             <td>{{player.birth.year}}</td>
             <td>{{player.note_actuel}}</td>

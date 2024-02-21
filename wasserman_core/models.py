@@ -13,7 +13,7 @@ class Coach(models.Model):
     financial = models.CharField(max_length=10,default='non calculable')
     potential = models.CharField(max_length=10,default='non calculable')
     note_totale = models.CharField(max_length=10,default='non calculable')
-    created_by = models.CharField(max_length=150,default=User,editable=False)
+    created_by = models.CharField(max_length=150,blank=True)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     def __str__(self):
@@ -34,7 +34,7 @@ class Club(models.Model):
     commentaires = models.CharField(max_length=2000,default='-')
     date_crea = models.DateField(default=datetime.datetime.today,editable=False)
     date_mod = models.DateField(default=datetime.datetime.today,editable=False)
-    created_by = models.CharField(max_length=150,default=User,editable=False)
+    created_by = models.CharField(max_length=150,blank=True)
     mod_by = models.CharField(max_length=150,default=User,editable=False)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
@@ -51,7 +51,7 @@ class Contact(models.Model):
     phone_2 = models.CharField(max_length=150,default='-')
     situation = models.CharField(max_length=1500,default='-')
     commentaires = models.CharField(max_length=1500,default='-')
-    created_by = models.CharField(max_length=150,default=User,editable=False)
+    created_by = models.CharField(max_length=150,blank=True)
     mod = models.CharField(max_length=150,default=User,editable=False)
     date_crea = models.DateField(default=datetime.datetime.today,editable=False)
     club_id = models.ForeignKey(Club, on_delete=models.SET_NULL, null=True,default=None)
@@ -115,22 +115,22 @@ class Player(models.Model):
     club_id = models.ForeignKey(Club, on_delete=models.SET_NULL, null=True, default=uuid.uuid4)
     created_time =  models.DateField(default=datetime.datetime.today,editable=False)
     modified_time =  models.DateField(default=datetime.datetime.today)
-    last_name =  models.CharField(max_length=50,default='-')
-    first_name =  models.CharField(max_length=50,default='-')
+    last_name =  models.CharField(max_length=50,null=True)
+    first_name =  models.CharField(max_length=50,null=True)
     potential =  models.CharField(max_length=10,default='R0')
     size = models.CharField(max_length=3,default=175)
-    birth =  models.DateField(default=datetime.datetime(1899, 12, 31))
+    birth =  models.DateField(null=True)
     other_pos = models.CharField(max_length=500,default=position)
     agent = models.CharField(max_length=500,default=0) #models.ManyToManyField(Agency)
     system = models.CharField(max_length=500,default='Inconnu')
-    end_contract = models.DateField(default=datetime.datetime.today)
+    end_contract = models.DateField(null=True,blank=True)
     wage = models.CharField(max_length=100,default='Inconnu')
-    situation = models.CharField(max_length=500,default='To complete')
+    situation = models.CharField(max_length=500,default='Inconnu')
     comment = models.CharField(max_length=2000,default='Inconnu')
     foot = models.CharField(max_length=500,default='Inconnu')
-    date_prop = models.DateField(default=datetime.datetime(9999, 12, 31))
+    date_prop = models.DateField(null=True,blank=True)
     move_cond = models.CharField(max_length=500,default='-')
-    end_mand = models.DateField(default=datetime.datetime(1899, 12, 31))
+    end_mand = models.DateField(null=True,blank=True)
     transfermarkt = models.CharField(max_length=1000, default='transfermarkt.fr')
     champ = models.CharField(max_length=500,default='Inconnu')
     phone = models.CharField(max_length=10000,default= 612456789)
@@ -139,7 +139,7 @@ class Player(models.Model):
     release = models.CharField(max_length=500,default='Inconnu')
     note_financ = models.CharField(max_length=10,default='R0')
     note_tot = models.CharField(max_length=5,default='R0',editable=False)
-    created_by = models.CharField(max_length=150,default=User,editable=False)
+    created_by = models.CharField(max_length=150,blank=True)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
 
@@ -162,9 +162,12 @@ class Player(models.Model):
         average = (potential_value + note_actuel_value + note_financ_value) / 3
         self.note_tot = f"R{average:.2f}"  # Conserver le format 'R' avec 2 décimales
 
+        self.last_name = self.last_name.upper()
+        
+        # Concaténer first_name et last_name en majuscules, puis affecter le résultat à name
+        self.name = f"{self.last_name} {self.first_name}".strip()
+
         super(Player, self).save(*args, **kwargs)
     
     def __str__(self):
         return self.name
-    
-
