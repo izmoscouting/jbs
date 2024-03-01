@@ -7,9 +7,9 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#about">A Propos</a></li>
 
         {% if user.is_authenticated %}
-
             <li class="nav-item"><a class="nav-link" href="{% url 'mercato' %}">Mercato</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'mercato' %}#portfolio">Joueurs</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'contacts' %}">Contacts</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'agences' %}">Agences</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'clubs' %}" target="_blank">Clubs</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Déconnexion</a></li>
                 

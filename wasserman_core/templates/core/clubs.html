@@ -1,4 +1,8 @@
-{% extends 'core/base_club.html' %} {% load static %} {{ clubs }} {% block content %} 
+{% extends 'core/base_club.html' %} 
+{% load static %} 
+{{ clubs }} 
+
+{% block content %}
 <div id="layoutSidenav">
   <div id="layoutSidenav_nav">
     <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
@@ -11,50 +15,15 @@
             </div>
             Accueil
           </a>
-          <div class="sb-sidenav-menu-heading">Interface</div>
-          <a
-            class="nav-link collapsed"
-            href="#"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseLayouts"
-            aria-expanded="false"
-            aria-controls="collapseLayouts"
-          >
-            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-            Filtres
-            <div class="sb-sidenav-collapse-arrow">
-              <i class="fas fa-angle-down"></i>
-            </div>
-          </a>
-          <div
-            class="collapse"
-            id="collapseLayouts"
-            aria-labelledby="headingOne"
-            data-bs-parent="#sidenavAccordion"
-          >
-          <nav class="sb-sidenav-menu-nested nav">
-            <label for="ageFilter" class="form-label">Année de Naissance</label>
-            <div class="slider"><input type="range" min="1970" max="2010" value="1980" oninput="ageDisplay.innerText = this.value" id="ageFilter"><p id="ageDisplay">1980</p></div>
-            <label for="ratingFilter" class="form-label">Note</label>
-            <div class="slider"><input type="range" min="0" max="5" step="0.5" value="0" oninput="ratingDisplay.innerText = this.value" id="ratingFilter"><p id="ratingDisplay">-1</p></div>
-            <select id="positionFilter" class="form-select">
-              <option value="">Toutes les positions</option>
-              {% for position in positions %}
-              <option value="{{ position }}">{{ position }}</option>
-              <!-- Ajoutez plus d'options pour d'autres positions -->
-              {% endfor %}
-            </select>
-          </nav>
-          </div>
-          <a class="nav-link" href="charts.html">
+          <a class="nav-link" href="{% url 'mercato' %}">
             <div class="sb-nav-link-icon">
               <i class="fas fa-chart-area"></i>
             </div>
-            Demandes
+            Mercato
           </a>
-          <a class="nav-link" href="tables.html">
+          <a class="nav-link" href="{% url 'business' %}">
             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-            Tableaux
+            Demandes
           </a>
         </div>
       </div>
@@ -73,6 +42,9 @@
           />
         </div>
         <!-- Champ de filtrage par âge -->
+        <div class="col-md-6 text-right">
+          <a class="btn btn-primary btn-sm" href="{% url 'add_club' %}" target="'_blank" role="button">Ajouter un club</a> <!-- Utilisez btn-sm pour rapetisser le bouton -->
+        </div>
       </div>
       <table class="table table-striped" id="dataTableClubs">
         <thead>
@@ -84,8 +56,10 @@
             <th onclick="sortTable(4)">Pays</th>
             <th onclick="sortTable(5)">Note Actuelle</th>
             <th onclick="sortTable(6)">Note Financière</th>
-            <th onclick="sortTable(7)">Note Potentielle</th>
+            <th onclick="sortTable(7)">Note Totale</th>
             <th onclick="sortTable(8)">Commentaires</th>
+            <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -101,6 +75,8 @@
             <td>{{club.financial}}</td>
             <td>{{club.rating}}</td>
             <td>{{club.commentaires}}</td>
+            <td class="text-right"><a class="btn btn-warning btn-sm" href="{% url 'update_club' club.id %}" role="button">Modifier</a></td>
+            <td class="text-right"><a class="btn btn-danger btn-sm" href="{% url 'delete_club' club.id %}" role="button">Supprimer</a></td>
           </tr>
           {% endfor %}
           <!-- Ajoutez plus de lignes de données ici -->

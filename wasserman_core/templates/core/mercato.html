@@ -1,11 +1,11 @@
-{% extends 'core/base_table.html' %} {% load static %} {{ players }} {% block content %} 
+{% extends 'core/base_table.html' %} {% load static %} {{ players }} {{ positions }} {% block content %} 
 <div id="layoutSidenav">
   <div id="layoutSidenav_nav">
     <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
       <div class="sb-sidenav-menu">
         <div class="nav">
           <div class="sb-sidenav-menu-heading">Core</div>
-          <a class="nav-link" href="index.html">
+          <a class="nav-link" href="{% url 'access' %}">
             <div class="sb-nav-link-icon">
               <i class="fas fa-tachometer-alt"></i>
             </div>
@@ -33,28 +33,36 @@
             data-bs-parent="#sidenavAccordion"
           >
           <nav class="sb-sidenav-menu-nested nav">
-            <label for="ageFilter" class="form-label">Année de Naissance</label>
-            <div class="slider"><input type="range" min="1970" max="2010" value="1980" oninput="ageDisplay.innerText = this.value" id="ageFilter"><p id="ageDisplay">1980</p></div>
-            <label for="ratingFilter" class="form-label">Note</label>
-            <div class="slider"><input type="range" min="0" max="5" step="0.5" value="0" oninput="ratingDisplay.innerText = this.value" id="ratingFilter"><p id="ratingDisplay">-1</p></div>
             <select id="positionFilter" class="form-select">
               <option value="">Toutes les positions</option>
               {% for position in positions %}
               <option value="{{ position }}">{{ position }}</option>
               <!-- Ajoutez plus d'options pour d'autres positions -->
               {% endfor %}
-            </select>
+            </select></br>
+            <label for="ageFilter" class="form-label">Âge</label>
+            <div class="slider" id="ageSlider"></br>
+              <input type="text" id="ageRange" readonly style="border:0; color:#0f055a; font-weight:bold;">
+            </div></br></br>
+            <label for="ratingRange">Note Totale</label></br>
+            <div class="slider" id="ratingSlider"></br>
+              <input type="text" id="ratingRange" readonly style="border:0; color:#0f055a; font-weight:bold;">
+            </div></br></br>
+            <label for="contractRange">FDC</label></br>
+            <div class="slider" id="contractSlider"></br>
+              <input type="text" id="contractRange" readonly style="border:0; color:#0f055a; font-weight:bold;">
+            </div></br></br>
           </nav>
           </div>
-          <a class="nav-link" href="#!">
+          <a class="nav-link" href="{%url 'business' %}">
             <div class="sb-nav-link-icon">
               <i class="fas fa-chart-area"></i>
             </div>
             Demandes
           </a>
-          <a class="nav-link" href="#!">
+          <a class="nav-link" href="{%url 'clubs' %}">
             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-            Tableaux
+            Clubs
           </a>
         </div>
       </div>
@@ -81,36 +89,32 @@
       <table class="table table-striped" id="dataTableJoueurs">
         <thead>
           <tr>
-            <th onclick="sortTable(0)">Name</th>
-            <th onclick="sortTable(1)">Poste</th>
-            <th onclick="sortTable(2)">Autre Poste</th>
-            <th onclick="sortTable(3)">Club</th>
-            <th onclick="sortTable(4)">Système Préférentiels</th>
-            <th onclick="sortTable(5)">Né en</th>
-            <th onclick="sortTable(6)">Note Actuelle</th>
-            <th onclick="sortTable(7)">Note Potentielle</th>
-            <th onclick="sortTable(8)">Note Financière</th>
-            <th onclick="sortTable(9)">Note Totale</th>
-            <th onclick="sortTable(10)">FDC</th>
-            <th onclick="sortTable(11)">Salaire</th>
+            <th>Nom</th>
+            <th>Age</th>
+            <th>Poste</th>
+            <th>Autre Poste</th>
+            <th>Club</th>
+            <th>Note Actuelle</th>
+            <th>Note Potentielle</th>
+            <th>Note Financière</th>
+            <th>Note Totale</th>
+            <th>FDC</th>
           </tr>
         </thead>
         <tbody>
           <!-- Vos données vont ici -->
           {% for player in players %}
           <tr>
-            <td>{{player.name}}</td>
+            <td><a href="{% url 'joueur' player.id %}" target="_blank">{{player.name}}</a></td>
+            <td>{{player.age}}</td>
             <td>{{player.position}}</td>
             <td>{{player.other_pos}}</td>
-            <td><a href="{% url 'club' player.club_id.id %}">{{player.club_id.Club}}</a></td>
-            <td>{{player.system}}</td>
-            <td>{{player.birth.year}}</td>
+            <td><a href="{% url 'club' player.club_id.id %}" target="_blank">{{player.club_id.Club}}</a></td>
             <td>{{player.note_actuel}}</td>
             <td>{{player.potential}}</td>
             <td>{{player.note_financ}}</td>
             <td>{{player.note_tot}}</td>
             <td>{{player.end_contract}}</td>
-            <td>{{player.wage}}</td>
           </tr>
           {% endfor %}
           <!-- Ajoutez plus de lignes de données ici -->
@@ -118,6 +122,60 @@
       </table>
     </div>
     <script>
+      $(document).ready(function() {
+
+          $('#dataTableJoueurs').DataTable({
+            stateSave: true,
+            searching: false,
+            lengthMenu: [[10, 25, 50, 100, 500, 1000000], [10, 25, 50, 100, 500, 1000000]],
+            pageLength: 1000000, 
+          });
+          // Initialisation du slider avec deux handles
+          $("#ratingSlider").slider({
+              range: true,
+              min: 0,
+              max: 5,
+              step: 0.5,
+              values: [0, 5],
+              slide: function(event, ui) {
+                  $("#ratingRange").val(ui.values[0] + " - " + ui.values[1]);
+              }
+          });
+  
+          // Affichage initial de la plage de notes
+          $("#ratingRange").val($("#ratingSlider").slider("values", 0) +
+              " - " + $("#ratingSlider").slider("values", 1));
+
+          $("#ageSlider").slider({
+          range: true,
+          min: 12,
+          max: 130,
+          step: 1,
+          values: [12, 130],
+          slide: function(event, ui) {
+              $("#ageRange").val(ui.values[0] + " - " + ui.values[1]);
+          }
+      });
+
+      // Affichage initial de la plage de notes
+      $("#ageRange").val($("#ageSlider").slider("values", 0) +
+          " - " + $("#ageSlider").slider("values", 1));
+
+      $("#contractSlider").slider({
+      range: true,
+      min: new Date().getFullYear() - 5,
+      max: new Date().getFullYear() + 10,
+      step: 1,
+      values: [new Date().getFullYear() - 5, new Date().getFullYear() + 10],
+      slide: function(event, ui) {
+          $("#contractRange").val(ui.values[0] + " - " + ui.values[1]);
+      }
+  });
+
+      // Affichage initial de la plage de notes
+      $("#contractRange").val($("#contractSlider").slider("values", 0) +
+          " - " + $("#contractSlider").slider("values", 1));
+      });
   </script>
     {% endblock %}
   </div>

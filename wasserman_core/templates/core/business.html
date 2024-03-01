@@ -1,0 +1,139 @@
+{% extends 'core/base_busi.html' %} {% load static %} {{ business }} {% block content %} 
+<div id="layoutSidenav">
+  <div id="layoutSidenav_nav">
+    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+      <div class="sb-sidenav-menu">
+        <div class="nav">
+          <div class="sb-sidenav-menu-heading">Core</div>
+          <a class="nav-link" href="{% url 'access' %}">
+            <div class="sb-nav-link-icon">
+              <i class="fas fa-tachometer-alt"></i>
+            </div>
+            Accueil
+          </a>
+          <div class="sb-sidenav-menu-heading">Interface</div>
+          <a
+            class="nav-link collapsed"
+            href="#"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseLayouts"
+            aria-expanded="false"
+            aria-controls="collapseLayouts"
+          >
+            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+            Filtres
+            <div class="sb-sidenav-collapse-arrow">
+              <i class="fas fa-angle-down"></i>
+            </div>
+          </a>
+          <div
+            class="collapse"
+            id="collapseLayouts"
+            aria-labelledby="headingOne"
+            data-bs-parent="#sidenavAccordion"
+          >
+          <nav class="sb-sidenav-menu-nested nav">
+            <label for="positionFilter">Sélectionnez le stage:</label></br>
+            <select id="positionFilter" class="form-select" multiple>
+              {% for position in positions %}
+              <option value="{{ position }}">{{ position }}</option>
+              <!-- Ajoutez plus d'options pour d'autres positions -->
+              {% endfor %}
+            </select></br>
+            <label for="contractRange">Date de Fin</label></br>
+            <div class="slider" id="contractSlider"></br>
+              <input type="text" id="contractRange" readonly style="border:0; color:#0f055a; font-weight:bold;">
+            </div></br></br>
+          </nav>
+          </div>
+          <a class="nav-link" href="{% url 'mercato' %}">
+            <div class="sb-nav-link-icon">
+              <i class="fas fa-chart-area"></i>
+            </div>
+            Mercato
+          </a>
+          <a class="nav-link" href="{% url 'clubs' %}">
+            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+            Clubs
+          </a>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <div id="layoutSidenav_content" class="bg-light py-5">
+    <div class="container">
+      <h1>Business</h1>
+      <div class="row mb-2">
+        <div class="col-md-6">
+          <input
+            type="text"
+            id="search"
+            class="form-control"
+            placeholder="Rechercher..."
+          />
+        </br>
+          <div class="col-md-6 text-right">
+            <a class="btn btn-primary btn-sm" href="{% url 'add_business' %}" target="'_blank" role="button">Ajouter une demande</a> <!-- Utilisez btn-sm pour rapetisser le bouton -->
+          </div>
+        </div>
+        <!-- Champ de filtrage par âge -->
+      </div>
+      <table class="table table-striped" id="dataDemandes">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Poste Recherché</th>
+            <th>Date d'ouverture</th>
+            <th>Date de fin</th>
+            <th>Stage</th>
+            <th>Info Supplémentaires</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Vos données vont ici -->
+          {% for bus in business %}
+          <tr>
+            <td>{{bus.name}}</td>
+            <td>{{bus.pos_voulu}}</td>
+            <td>{{bus.date_created}}</td>
+            <td>{{bus.closing_date}}</td>
+            <td>{{bus.stage}}</td>
+            <td>{{bus.desc}}</td>
+            <td class="text-right"><a class="btn btn-warning btn-sm" href="{% url 'update_business' bus.id %}" role="button">Modifier</a></td>
+            <td class="text-right"><a class="btn btn-danger btn-sm" href="{% url 'delete_business' bus.id %}" role="button">Supprimer</a></td>
+          </tr>
+          {% endfor %}
+          <!-- Ajoutez plus de lignes de données ici -->
+        </tbody>
+      </table>
+    </div>
+    <script>
+      $(document).ready(function() {
+
+          $('#dataDemandes').DataTable({
+            stateSave: true,
+            searching: false,
+            lengthMenu: [[10, 25, 50, 100, 500, 1000000], [10, 25, 50, 100, 500, 1000000]],
+            pageLength: 1000000, 
+          });
+      $("#contractSlider").slider({
+      range: true,
+      min: new Date().getFullYear()-2,
+      max: new Date().getFullYear() + 3,
+      step: 1,
+      values: [new Date().getFullYear()-2, new Date().getFullYear() + 3],
+      slide: function(event, ui) {
+          $("#contractRange").val(ui.values[0] + " - " + ui.values[1]);
+      }
+  });
+
+      // Affichage initial de la plage de notes
+      $("#contractRange").val($("#contractSlider").slider("values", 0) +
+          " - " + $("#contractSlider").slider("values", 1));
+      });
+  </script>
+    {% endblock %}
+  </div>
+</div>

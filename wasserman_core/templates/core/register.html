@@ -1,4 +1,5 @@
 {% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
 
 <title>Inscription - JBS</title>
@@ -68,7 +69,7 @@
             <form method="POST" action="{% url 'register' %}">
                 {% csrf_token %}
 
-                {{ form.as_p }}
+                {{ form|crispy }}
 
                 <br>
                 <button type="submit" class="btn btn-primary btn-block mb-4">

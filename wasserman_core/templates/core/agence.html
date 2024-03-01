@@ -1,0 +1,80 @@
+{% extends 'core/base_club.html' %} 
+{% load static %} 
+{{ clubs }} 
+
+{% block content %}
+<div id="layoutSidenav">
+  <div id="layoutSidenav_nav">
+    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+      <div class="sb-sidenav-menu">
+        <div class="nav">
+          <div class="sb-sidenav-menu-heading">Core</div>
+          <a class="nav-link" href="index.html">
+            <div class="sb-nav-link-icon">
+              <i class="fas fa-tachometer-alt"></i>
+            </div>
+            Accueil
+          </a>
+          <a class="nav-link" href="{% url 'mercato' %}">
+            <div class="sb-nav-link-icon">
+              <i class="fas fa-chart-area"></i>
+            </div>
+            Mercato
+          </a>
+          <a class="nav-link" href="{% url 'business' %}">
+            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+            Demandes
+          </a>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <div id="layoutSidenav_content" class="bg-light py-5">
+    <div class="container">
+      <h1>Agences</h1>
+      <div class="row mb-2">
+        <div class="col-md-6">
+          <input
+            type="text"
+            id="search"
+            class="form-control"
+            placeholder="Rechercher..."
+          />
+        </div>
+        <!-- Champ de filtrage par âge -->
+        <div class="col-md-6 text-right">
+          <a class="btn btn-primary btn-sm" href="{% url 'add_agence' %}" target="'_blank" role="button">Ajouter une agence</a> <!-- Utilisez btn-sm pour rapetisser le bouton -->
+        </div>
+      </div>
+      <table class="table table-striped" id="dataTableClubs">
+        <thead>
+          <tr>
+            <th onclick="sortTable(0)">Agence</th>
+            <th onclick="sortTable(1)">Contact(s)</th>
+            <th onclick="sortTable(2)">Pays</th>
+            <th onclick="sortTable(3)">Infos Complémentaires</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Vos données vont ici -->
+          {% for club in clubs %}
+          <tr>
+            <td><a>{{club.name}}</a></td>
+            <td>{{club.contact_id}}</td>
+            <td>{{club.country}}</td>
+            <td>{{club.notes}}</td>
+            <td class="text-right"><a class="btn btn-warning btn-sm" href="{% url 'update_agence' club.id %}" role="button" target="_blank">Modifier</a></td>
+            <td class="text-right"><a class="btn btn-danger btn-sm" href="{% url 'delete_agence' club.id %}" role="button" target="_blank">Supprimer</a></td>
+          </tr>
+          {% endfor %}
+          <!-- Ajoutez plus de lignes de données ici -->
+        </tbody>
+      </table>
+    </div>
+    <script>
+  </script>
+    {% endblock %}
+  </div>
+</div>

@@ -1,6 +1,6 @@
 from import_export.admin import ImportExportModelAdmin
 from django.contrib import admin
-from.models import Player, Scout, Business, Club, Agency, Coach, Contact
+from.models import Player, Scout, Business, Club, Agency, Coach, Contact, Report
 
 
 
@@ -43,3 +43,8 @@ class ContactAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     ...
     
 admin.site.register(Contact,ContactAdmin)
+
+class ReportAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    ...
+    
+admin.site.register(Report,ReportAdmin)

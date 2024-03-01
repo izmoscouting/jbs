@@ -1,0 +1,193 @@
+{% extends 'core/base_player.html' %}
+{% load static %}
+{{ player }}
+{{ report }}
+{{ info }}
+
+{% block content %}
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading">Autres Pages</div>
+                    <a class="nav-link" href="{% url 'mercato' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                        Mercato
+                    </a>
+                    <a class="nav-link" href="{% url 'business' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        Demandes
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">{{ player.name }}</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active">{{ player.club_id }}</li>
+                </ol>
+                <div class="row">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card bg-primary text-white mb-4">
+                            <div class="card-body">{{ player.contact }}</div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a class="small text-white stretched-link" href="#" target="_blank">Agent</a>
+                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card bg-warning text-white mb-4">
+                            <div class="card-body">{{ player.note_tot }}</div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a>Note Totale</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card bg-success text-white mb-4">
+                            <div class="card-body">{{ player.end_contract }}</div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a>FDC</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card bg-danger text-white mb-4">
+                            <div class="card-body">{{ player.end_mand }}</div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a>Fin Mandat</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-chart-area me-1"></i>
+                                Profil    <a class="btn btn-warning btn-sm" href="{% url 'update_player' player.id %}" target="_blank">Modifier</a>
+                            </div>
+                            <div class="card-body">
+                                <!-- Player Basic Info Table -->
+                                <table class="table table-striped" id="dataTableClubs">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <th>Club</th>
+                                            <th>Date de Naissance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ player.name }}</td>
+                                            <td>{{ player.club_id }}</td>
+                                            <td>{{ player.birth }} ({{ player.age }})</td>
+                                        </tr>
+                                        <!-- Ajoutez plus de lignes ici si nécessaire -->
+                                    </tbody>
+                                </table></br>
+                                <!-- Player Physical Info Table -->
+                                <table class="table table-striped" id="dataTableClubs">
+                                    <thead>
+                                        <tr>
+                                            <th>Pied Fort</th>
+                                            <th>Taille</th>
+                                            <th>Poste</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ player.foot }}</td>
+                                            <td>{{ player.size }}</td>
+                                            <td>{{ player.position }}</td>
+                                        </tr>
+                                        <!-- Ajoutez plus de lignes ici si nécessaire -->
+                                    </tbody>
+                                </table></br>
+                                <!-- Player Rating Info Table -->
+                                <table class="table table-striped" id="dataTableClubs">
+                                    <thead>
+                                        <tr>
+                                            <th>Note Potentielle</th>
+                                            <th>Note Actuelle</th>
+                                            <th>Note Financière</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ player.potential }}</td>
+                                            <td>{{ player.note_actuel }}</td>
+                                            <td>{{ player.note_financ }}</td>
+                                        </tr>
+                                        <!-- Ajoutez plus de lignes ici si nécessaire -->
+                                    </tbody>
+                                </table></br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-chart-bar me-1"></i>
+                                Rapports <a class="btn btn-success btn-sm" href="{% url 'add_report'%}" target="_blank">Ajouter</a>
+                            </div>
+                            <div class="card-body">
+                                <!-- Player Reports Table -->
+                                <table class="table table-striped" id="dataTableRapports">
+                                    <thead>
+                                        <tr>
+                                            <th>Rapports</th>
+                                            <th>Fait par</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for reports in report %}
+                                        <tr>
+                                            <td><a href="{% url 'rapport' reports.id %}" target="_blank">{{ reports.match }}</a></td>
+                                            <td>{{ reports.created_by }}</td>
+                                            <td class="text-right"><a class="btn btn-warning btn-sm" href="{% url 'update_report' reports.id %}" role="button" target="_blank">Modifier</a></td>
+                                            <td class="text-right"><a class="btn btn-danger btn-sm" href="{% url 'delete_report' reports.id %}" role="button" target="_blank">Supprimer</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                        <!-- Ajoutez plus de lignes ici si nécessaire -->
+                                    </tbody>
+                                </table></br></br></br></br>
+                                <!-- Player Info Table -->
+                                <table class="table table-striped" id="dataTableRapports">
+                                    <thead>
+                                        <tr>
+                                            <th>Nature de l'info</th>
+                                            <th>Info Mercato <a class="btn btn-success btn-sm" href="{% url 'info_mercato'%}" target="_blank">Ajouter</a></th>
+                                            <th>Date</th>
+                                            <th>Rapporté par</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for infos in info %}
+                                        <tr>
+                                            <td>{{ infos.nature }}</td>
+                                            <td>{{ infos.info }}</td>
+                                            <td>{{ infos.date }}</td>
+                                            <td>{{ infos.created_by }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                        <!-- Ajoutez plus de lignes ici si nécessaire -->
+                                    </tbody></br></br></br></br></br></br>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}
+<script></script>
