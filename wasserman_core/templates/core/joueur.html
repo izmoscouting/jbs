@@ -164,9 +164,10 @@
                                     <thead>
                                         <tr>
                                             <th>Nature de l'info</th>
-                                            <th>Info Mercato <a class="btn btn-success btn-sm" href="{% url 'info_mercato'%}" target="_blank">Ajouter</a></th>
+                                            <th>Info Mercato <a class="btn btn-success btn-sm" href="{% url 'info_mercato' player.id%}" target="_blank">Ajouter</a></th>
                                             <th>Date</th>
                                             <th>Rapporté par</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -176,6 +177,7 @@
                                             <td>{{ infos.info }}</td>
                                             <td>{{ infos.date }}</td>
                                             <td>{{ infos.created_by }}</td>
+                                            <td class="text-right"><a class="btn btn-danger btn-sm" href="{% url 'delete_info' infos.id %}" role="button" target="_blank">Supprimer</a></td>
                                         </tr>
                                         {% endfor %}
                                         <!-- Ajoutez plus de lignes ici si nécessaire -->

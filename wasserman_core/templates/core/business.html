@@ -95,10 +95,10 @@
           <!-- Vos données vont ici -->
           {% for bus in business %}
           <tr>
-            <td>{{bus.name}}</td>
+            <td><a href="{% url 'busi' bus.id %}" >{{bus.name}}</a></td>
             <td>{{bus.pos_voulu}}</td>
             <td>{{bus.date_created}}</td>
-            <td>{{bus.closing_date}}</td>
+            <td>{{bus.closing_date.year}} ({{bus.closing_date}})</td>
             <td>{{bus.stage}}</td>
             <td>{{bus.desc}}</td>
             <td class="text-right"><a class="btn btn-warning btn-sm" href="{% url 'update_business' bus.id %}" role="button">Modifier</a></td>

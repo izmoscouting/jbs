@@ -1,0 +1,120 @@
+{% extends 'core/base_dem.html' %}
+{% load static %}
+{{ bizi }}
+{{ bara }}
+
+{% block content %}
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading">Autres Pages</div>
+                    <a class="nav-link" href="{% url 'mercato' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                        Mercato
+                    </a>
+                    <a class="nav-link" href="{% url 'business' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        Demandes
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">{{ bara.name }}</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active">Demande du Club</li>
+                </ol>
+                <div class="row">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card bg-primary text-white mb-4">
+                            <div class="card-body">{{ bara.desc }}</div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a class="small text-white stretched-link">Info Importantes</a>
+                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card bg-warning text-white mb-4">
+                            <div class="card-body">{{ bara.date_created }}</div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a>Date d'Ouverture</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card bg-success text-white mb-4">
+                            <div class="card-body">{{ bara.closing_date }}</div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a>Date d'Expiration</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card bg-danger text-white mb-4">
+                            <div class="card-body">{{ bara.pos_voulu }}</div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a>Poste Recherché</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-chart-area me-1"></i>
+                                Shortlist
+                            </div>
+                            <div class="card-body">
+                                <!-- Player Basic Info Table -->
+                                <table class="table table-striped" id="dataTableShort">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <th>Club</th>
+                                            <th>Date de Naissance</th>
+                                            <th>Potentiel</th>
+                                            <th>Note Actuelle</th>
+                                            <th>Note Financière</th>
+                                            <th>Note Totale</th>
+                                            <th>Ajouté par</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for pl in bizi %}
+                                        <tr>
+                                            <td>{{ pl.player.name }}</td>
+                                            <td>{{ pl.player.club_id }}</td>
+                                            <td>{{ pl.player.birth }} ({{ pl.player.age }})</td>
+                                            <td>{{ pl.player.potential }}</td>
+                                            <td>{{ pl.player.note_actuel }}</td>
+                                            <td>{{ pl.player.note_financ }}</td>
+                                            <td>{{ pl.player.note_tot }}</td>
+                                            <td>{{ pl.created_by }}</td>
+                                            <td class="text-right"><a class="btn btn-danger btn-sm" href="{% url 'delete_target' pl.id %}" role="button" target="_blank">Supprimer</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table></br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}
+<script>
+    $(document).ready(function () {
+        // Initialize DataTable
+        $('#dataTableShort').DataTable();
+    });
+</script>

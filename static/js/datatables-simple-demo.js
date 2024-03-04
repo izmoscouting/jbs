@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     var ageFilter = $("#ageSlider");
     var ratingFilter = $("#ratingSlider");
+    var ratingFFilter = $("#ratingFSlider");
+    var ratingAFilter = $("#ratingASlider");
+    var ratingPFilter = $("#ratingPSlider");
     var positionFilter = document.getElementById('positionFilter');
     var contractFilter = $("#contractSlider")
     var searchFilter = document.getElementById('search'); // Assurez-vous que l'ID est correct
@@ -9,6 +12,9 @@ document.addEventListener('DOMContentLoaded', function() {
     var currentFilters = {
         age: [12,130],
         rating: [0,5],
+        ratingA: [0, 5],  // Nouvelle propriété pour la note actuelle
+        ratingP: [0, 5],  // Nouvelle propriété pour la note potentielle
+        ratingF: [0, 5],  // Nouvelle propriété pour la note financière
         position: positionFilter.value,
         contract: [new Date().getFullYear() - 6, new Date().getFullYear() + 10]
     };
@@ -39,6 +45,30 @@ document.addEventListener('DOMContentLoaded', function() {
                 display = false;
             }
 
+            // Filtrage par note actuelle
+            var tdRatingA = $(tr[i]).find("td:eq(5)");
+            var ratingAText = tdRatingA.length > 0 ? tdRatingA.text() : "";
+            var ratingA = ratingAText === "non calculable" ? -2 : parseFloat(ratingAText.replace("R", ""));
+            if (ratingAText !== "non calculable" && currentFilters.ratingA !== "" && (isNaN(ratingA) || ratingA < currentFilters.ratingA[0] || ratingA > currentFilters.ratingA[1])) {
+                display = false;
+            }
+
+            // Filtrage par note potentielle
+            var tdRatingP = $(tr[i]).find("td:eq(6)");
+            var ratingPText = tdRatingP.length > 0 ? tdRatingP.text() : "";
+            var ratingP = ratingPText === "non calculable" ? -2 : parseFloat(ratingPText.replace("R", ""));
+            if (ratingPText !== "non calculable" && currentFilters.ratingP !== "" && (isNaN(ratingP) || ratingP < currentFilters.ratingP[0] || ratingP > currentFilters.ratingP[1])) {
+                display = false;
+            }
+
+            // Filtrage par note financière
+            var tdRatingF = $(tr[i]).find("td:eq(7)");
+            var ratingFText = tdRatingF.length > 0 ? tdRatingF.text() : "";
+            var ratingF = ratingFText === "non calculable" ? -2 : parseFloat(ratingFText.replace("R", ""));
+            if (ratingFText !== "non calculable" && currentFilters.ratingF !== "" && (isNaN(ratingF) || ratingF < currentFilters.ratingF[0] || ratingF > currentFilters.ratingF[1])) {
+                display = false;
+            }
+
             // Filtrage par position
             var tdPosition = $(tr[i]).find("td:eq(2)");
             var position = tdPosition.length > 0 ? tdPosition.text() : "";
@@ -47,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             // Filtrage par contrat
-            var tdContract = $(tr[i]).find("td:eq(9)")
+            var tdContract = $(tr[i]).find("td:eq(9)");
             // Extract year from the date string
             var contractDate = tdContract.length > 0 ? new Date(tdContract.text()) : null;
             var contractYear = contractDate ? contractDate.getFullYear() : null;
@@ -98,6 +128,44 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Nouveaux sliders
+    ratingAFilter.slider({
+        range: true,
+        min: 0,
+        max: 5,
+        step: 0.5,
+        values: [0, 5],
+        change: function(event, ui) {
+            currentFilters.ratingA = ui.values;
+            applyFilters();
+        }
+    });
+
+    ratingPFilter.slider({
+        range: true,
+        min: 0,
+        max: 5,
+        step: 0.5,
+        values: [0, 5],
+        change: function(event, ui) {
+            currentFilters.ratingP = ui.values;
+            applyFilters();
+        }
+    });
+
+    ratingFFilter.slider({
+        range: true,
+        min: 0,
+        max: 5,
+        step: 0.5,
+        values: [0, 5],
+        change: function(event, ui) {
+            currentFilters.ratingF = ui.values;
+            console.log("Finan Values:", ui.values)
+            applyFilters();
+        }
+    });
+
     positionFilter.addEventListener('change', function() {
         currentFilters.position = this.value;
         applyFilters();
@@ -105,10 +173,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     contractFilter.slider({
         range: true,
-        min: new Date().getFullYear() - 6,
+        min: new Date().getFullYear() - 5,
         max: new Date().getFullYear() + 10,
         step: 1,
-        values: [new Date().getFullYear() - 6, new Date().getFullYear() + 10],
+        values: [new Date().getFullYear() - 5, new Date().getFullYear() + 10],
         change: function(event, ui) {
             currentFilters.contract = ui.values;
             console.log("Year Values:", ui.values)

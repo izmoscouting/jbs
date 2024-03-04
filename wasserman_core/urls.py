@@ -16,7 +16,9 @@ urlpatterns = [
     path('core/add_clubs/',views.add_club,name='add_club'),
     path('core/add_agences/',views.add_agence,name='add_agence'),
     path('core/add_contacts/',views.add_contact,name='add_contact'),
-    path('core/info_mercato/', views.add_info_mercato, name='info_mercato'),
+    path('core/info_mercato/<player_id>', views.add_info_mercato, name='info_mercato'),
+    path('core/add_shortlist/<player_id>', views.add_shortlist, name='add_shortlist'),
+
 
     #path('core/add_coach/',CoachAddWizard.as_view(),name='add_coach'),
     path('core/add_player_success/', views.success_view, name='add_player_success'),
@@ -37,6 +39,8 @@ urlpatterns = [
     path('core/delete_business/<pk>', views.delete_business, name='delete_business'),
     path('core/delete_agence/<pk>', views.delete_agence, name='delete_agence'),
     path('core/delete_contact/<pk>', views.delete_contact, name='delete_contact'),
+    path('core/delete_info/<pk>', views.delete_info, name='delete_info'),
+    path('core/delete_target/<pk>', views.delete_target, name='delete_target'),
 
 
     path('core/clubs/', views.clubs, name='clubs'),
@@ -48,5 +52,6 @@ urlpatterns = [
     path('core/joueur/<pk>', views.joueur, name='joueur'),
     path('core/rapport/<pk>', views.report, name='rapport'),
     path('core/clubs/<pk>', views.club, name='club'),
+    path('core/business/<pk>', views.bizi, name='busi'),
     
 ]

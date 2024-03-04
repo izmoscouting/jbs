@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django_select2.forms import ModelSelect2Widget
 from django.forms import ModelForm
-from .models import Player, Coach, Report, InfoMercato, Business, Club, Agency, Contact
+from .models import Player, Coach, Report, InfoMercato, Business, Club, Agency, Contact, BusiTargets
 
 class SignUpForm(UserCreationForm):
 	email = forms.EmailField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Adresse Mail'}))
@@ -33,11 +33,6 @@ class SignUpForm(UserCreationForm):
 		self.fields['password2'].help_text = '<span class="form-text text-muted"><small>Entrez le même mot de passe, pour la vérification.</small></span>'
 
 
-#Formulaire Joueur
-          
-
-          
-		
 # Sous-formulaire pour l'étape 1
 class PlayerAdd1(forms.ModelForm):
     class Meta:
@@ -187,9 +182,8 @@ class ReportAddWizard2(forms.ModelForm):
 class InfoMercatoForm(forms.ModelForm):
     class Meta:
         model = InfoMercato
-        fields = ['player', 'nature', 'info']
+        fields = ['nature', 'info']
         labels = {
-             'player':'Joueur',
              'nature':'Nature de l\'info',
              'info':'Information'
         }
@@ -259,4 +253,12 @@ class ContactsForm(forms.ModelForm):
             'first_name': 'Prénom',
             'phone':'Téléphone',
             'commentaires': 'Infos Complémentaires'
+        }
+
+class ShortlistForm(forms.ModelForm):
+    class Meta:
+        model = BusiTargets
+        fields = ['business']
+        labels = {
+            'business': 'Demandes Clubs'
         }

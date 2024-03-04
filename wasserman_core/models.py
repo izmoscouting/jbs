@@ -296,3 +296,11 @@ class InfoMercato(models.Model):
     date = models.DateField(default=datetime.datetime.today)
     info = models.TextField()
     nature = models.CharField(max_length=250,blank=True)
+
+class BusiTargets(models.Model):
+    business = models.ForeignKey(Business, on_delete=models.CASCADE)
+    player = models.ForeignKey(Player,null=True,on_delete=models.SET_NULL)
+    created_by = models.CharField(max_length=150,blank=True)
+
+
+

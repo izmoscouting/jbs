@@ -48,6 +48,18 @@
             <div class="slider" id="ratingSlider"></br>
               <input type="text" id="ratingRange" readonly style="border:0; color:#0f055a; font-weight:bold;">
             </div></br></br>
+            <label for="ratingFRange">Note Financière</label></br>
+            <div class="slider" id="ratingFSlider"></br>
+              <input type="text" id="ratingFRange" readonly style="border:0; color:#0f055a; font-weight:bold;">
+            </div></br></br>
+            <label for="ratingARange">Note Actuelle</label></br>
+            <div class="slider" id="ratingASlider"></br>
+              <input type="text" id="ratingARange" readonly style="border:0; color:#0f055a; font-weight:bold;">
+            </div></br></br>
+            <label for="ratingPRange">Note Potentielle</label></br>
+            <div class="slider" id="ratingPSlider"></br>
+              <input type="text" id="ratingPRange" readonly style="border:0; color:#0f055a; font-weight:bold;">
+            </div></br></br>
             <label for="contractRange">FDC</label></br>
             <div class="slider" id="contractSlider"></br>
               <input type="text" id="contractRange" readonly style="border:0; color:#0f055a; font-weight:bold;">
@@ -99,6 +111,7 @@
             <th>Note Financière</th>
             <th>Note Totale</th>
             <th>FDC</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -114,7 +127,15 @@
             <td>{{player.potential}}</td>
             <td>{{player.note_financ}}</td>
             <td>{{player.note_tot}}</td>
-            <td>{{player.end_contract}}</td>
+            <td>{{player.end_contract.year}} ({{player.end_contract}})</td>
+            <td>
+              <a href="{% url 'add_shortlist' player.id %}" class="btn btn-success" target="_blank">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-plus-fill" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5m6.5-11a.5.5 0 0 0-1 0V6H6a.5.5 0 0 0 0 1h1.5v1.5a.5.5 0 0 0 1 0V7H10a.5.5 0 0 0 0-1H8.5z"></path>
+                  </svg>
+                  Ajouter à une shortlist
+              </a>
+          </td>
           </tr>
           {% endfor %}
           <!-- Ajoutez plus de lignes de données ici -->
@@ -145,6 +166,51 @@
           // Affichage initial de la plage de notes
           $("#ratingRange").val($("#ratingSlider").slider("values", 0) +
               " - " + $("#ratingSlider").slider("values", 1));
+
+          // Initialise le slider pour la note financière
+          $("#ratingFSlider").slider({
+              range: true,
+              min: 0,
+              max: 5,  // Ajustez la plage en fonction de votre échelle de notation financière
+              step: 0.5,
+              values: [0, 5],
+              slide: function(event, ui) {
+                  $("#ratingFRange").val(ui.values[0] + " - " + ui.values[1]);
+              }
+          });
+
+          $("#ratingFRange").val($("#ratingFSlider").slider("values", 0) +
+              " - " + $("#ratingFSlider").slider("values", 1));
+
+          // Initialise le slider pour la note actuelle
+          $("#ratingASlider").slider({
+              range: true,
+              min: 0,
+              max: 5,  // Ajustez la plage en fonction de votre échelle de notation actuelle
+              step: 0.5,
+              values: [0, 5],
+              slide: function(event, ui) {
+                  $("#ratingARange").val(ui.values[0] + " - " + ui.values[1]);
+              }
+          });
+
+          $("#ratingARange").val($("#ratingASlider").slider("values", 0) +
+              " - " + $("#ratingASlider").slider("values", 1));
+
+          // Initialise le slider pour la note potentielle
+          $("#ratingPSlider").slider({
+              range: true,
+              min: 0,
+              max: 5,  // Ajustez la plage en fonction de votre échelle de notation potentielle
+              step: 0.5,
+              values: [0, 5],
+              slide: function(event, ui) {
+                  $("#ratingPRange").val(ui.values[0] + " - " + ui.values[1]);
+              }
+          });
+
+          $("#ratingPRange").val($("#ratingPSlider").slider("values", 0) +
+              " - " + $("#ratingPSlider").slider("values", 1));
 
           $("#ageSlider").slider({
           range: true,

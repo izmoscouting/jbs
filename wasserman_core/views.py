@@ -8,12 +8,19 @@ from django.contrib.auth.forms import UserCreationForm
 from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
-from .forms import SignUpForm,InfoMercatoForm, PlayerAdd1,PlayerAdd2,PlayerAdd3,CoachAddWizard1,CoachAddWizard2,ReportAddWizard1,ReportAddWizard2, BusinessForm,ClubsForm,AgencesForm,ContactsForm
+from .forms import SignUpForm,InfoMercatoForm, PlayerAdd1,PlayerAdd2,PlayerAdd3,CoachAddWizard1,CoachAddWizard2,ReportAddWizard1,ReportAddWizard2, BusinessForm,ClubsForm,AgencesForm,ContactsForm, ShortlistForm
 from django import forms 
-from .models import Player, Club, Business, Report, InfoMercato, Agency, Contact
+from .models import Player, Club, Business, Report, InfoMercato, Agency, Contact, BusiTargets
 from formtools.wizard.views import SessionWizardView
 import datetime
 
+def get_player_info(player_id):
+    try:
+        player_info = Player.objects.get(id=player_id)
+        return player_info
+    except Player.DoesNotExist:
+        # Gérer le cas où le joueur n'est pas trouvé
+        return None
 
 def method_login_required(method):
     return method_decorator(login_required, name=method)
@@ -55,9 +62,8 @@ def register_user(request):
             password = form.cleaned_data['password1']
             #login user
             user = authenticate(username=username, password=password)
-            login(request, user)
-            messages.success(request, ("Vous vous êtes bien inscrits"))
-            return redirect('access')
+            messages.success(request, ("Vous vous êtes bien inscrits, en attente de validation"))
+            return redirect('home')
         else:
             messages.success(request, ("Réessayez"))
             return redirect('register')
@@ -66,19 +72,46 @@ def register_user(request):
     
 
 @login_required()
-def add_info_mercato(request):
+def add_info_mercato(request, player_id):
     if request.method == 'POST':
         form = InfoMercatoForm(request.POST)
         if form.is_valid():
             info_mercato = form.save(commit=False)
-            info_mercato.created_by = request.user.username  # Vous pouvez personnaliser ceci en fonction de la logique de votre application
+            info_mercato.created_by = request.user.username
+            info_mercato.player_id = player_id
             info_mercato.save()
-            player_id = info_mercato.player.id
-            return redirect('joueur', pk=player_id)  # Redirigez vers une page de succès ou ailleurs
+            return redirect('joueur', pk=player_id)
     else:
-        form = InfoMercatoForm()
+        # Pré-remplir le formulaire avec des valeurs spécifiques si nécessaire
+        # Par exemple, si vous avez déjà des informations sur le joueur
+        player_info = get_player_info(player_id)  # À remplacer par la logique réelle pour récupérer les informations du joueur
+        initial_data = {
+            'player': player_info.id
+            }
+        form = InfoMercatoForm(initial=initial_data)
 
     return render(request, 'core/add_info.html', {'form': form})
+
+@login_required()
+def add_shortlist(request, player_id):
+    if request.method == 'POST':
+        form = ShortlistForm(request.POST)
+        if form.is_valid():
+            info_mercato = form.save(commit=False)
+            info_mercato.created_by = request.user.username
+            info_mercato.player_id = player_id
+            info_mercato.save()
+            return redirect('mercato')
+    else:
+        # Pré-remplir le formulaire avec des valeurs spécifiques si nécessaire
+        # Par exemple, si vous avez déjà des informations sur le joueur
+        player_info = get_player_info(player_id)  # À remplacer par la logique réelle pour récupérer les informations du joueur
+        initial_data = {
+            'player': player_info.id
+            }
+        form = ShortlistForm(initial=initial_data)
+
+    return render(request, 'core/add_shortlist.html', {'form': form})
 
 @login_required()
 def add_business(request):
@@ -223,6 +256,12 @@ def joueur(request,pk):
     info = InfoMercato.objects.filter(player=pk)
     return render(request, 'core/joueur.html',{'player':playas,'report':report,'info':info})
 
+@login_required()
+def bizi(request,pk):
+    business = Business.objects.get(id=pk)
+    busi = BusiTargets.objects.filter(business=pk)
+    return render(request, 'core/bizi.html',{'bizi':busi,'bara':business})
+
 def report(request,pk):
     report = Report.objects.get(id=pk)
     return render(request, 'core/rapport.html',{'report':report})
@@ -267,6 +306,18 @@ def delete_business(request, pk):
     player = Business.objects.get(id=pk)
     player.delete()
     return redirect('business')
+
+@login_required()
+def delete_info(request, pk):
+    player = InfoMercato.objects.get(id=pk)
+    player.delete()
+    return redirect('access')
+
+@login_required()
+def delete_target(request, pk):
+    player = BusiTargets.objects.get(id=pk)
+    player.delete()
+    return redirect('access')
 
 @login_required()
 def update_contact(request, pk):

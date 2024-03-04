@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-<title>Ajouter Rapport - JBS</title>
+<title>Info Mercato - JBS</title>
 
 <!-- Section: Design Block -->
 <section class="background-radial-gradient overflow-hidden d-flex align-items-center">
@@ -59,7 +59,7 @@
       <div class="row gx-lg-5 align-items-center mb-5">
         <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
           <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(25, 81%, 95%)">
-            Ajoutez un nouveau rapport <br />
+            Ajoutez une info mercato <br />
             <span style="color: hsl(25, 81%, 75%)">à la base de données</span>
           </h1>
         </div>
@@ -72,17 +72,9 @@
             <div class="card-body px-4 py-5 px-md-5">
               <form method="POST" action="">
                   {% csrf_token %}
-                  {{ wizard.management_form }}
-                  {% if wizard.form.forms %}
-                      {{ wizard.form.management_form }}
-                      {% for form in wizard.form.forms %}
-                          {{ form|crispy }}
-                      {% endfor %}
-                  {% else %}
-                      {{ wizard.form|crispy}}
-                  {% endif %}
 
-                  <br>
+                  {{ form|crispy }}
+
                   <button type="submit" class="btn btn-primary btn-block mb-4">
                   Ajouter
                   </button>
@@ -101,11 +93,7 @@
 {% block scripts %}
 
 <script>
-  $("#id_0-contre").select2()
-  $("#id_0-other_pos").select2()
-  $("#id_0-player").select2()
-  $("#id_2-agence_id").select2()
-  $("#id_2-contact").select2();
+  $("#id_player").select2();
 </script>
 
 {% endblock %}
