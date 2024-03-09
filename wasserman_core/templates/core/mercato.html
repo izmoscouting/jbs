@@ -70,7 +70,7 @@
             <div class="sb-nav-link-icon">
               <i class="fas fa-chart-area"></i>
             </div>
-            Demandes
+            Business
           </a>
           <a class="nav-link" href="{%url 'clubs' %}">
             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
@@ -93,7 +93,8 @@
           />
         </br>
           <div class="col-md-6 text-right">
-            <a class="btn btn-primary btn-sm" href="{% url 'add-player' %}" target="'_blank" role="button">Ajouter un joueur</a> <!-- Utilisez btn-sm pour rapetisser le bouton -->
+            <a class="btn btn-primary btn-sm" href="{% url 'add-player' %}" target="'_blank" role="button">Ajouter un joueur</a>
+              <a class="btn btn-success btn-sm" href="{% url 'add_report'%}" target="_blank">Ajouter un rapport</a>
           </div>
         </div>
         <!-- Champ de filtrage par âge -->

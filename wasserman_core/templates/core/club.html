@@ -1,101 +1,173 @@
 {% extends 'core/base_club.html' %}
 {% load static %}
-
-{{ players }}
-{{ Business }}
+{{ playas }}
+{{ contact }}
+{{ club }}
 
 {% block content %}
-  <div id="layoutSidenav">
+<div id="layoutSidenav">
     <div id="layoutSidenav_nav">
-      <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-        <div class="sb-sidenav-menu">
-          <div class="nav">
-            <div class="sb-sidenav-menu-heading">Core</div>
-            <a class="nav-link" href="index.html">
-              <div class="sb-nav-link-icon">
-                <i class="fas fa-tachometer-alt"></i>
-              </div>
-              Accueil
-            </a>
-            <div class="sb-sidenav-menu-heading">Interface</div>
-            <a class="nav-link" href="charts.html">
-              <div class="sb-nav-link-icon">
-                <i class="fas fa-chart-area"></i>
-              </div>
-              Demandes
-            </a>
-            <a class="nav-link" href="tables.html">
-              <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-              Tableaux
-            </a>
-          </div>
-        </div>
-      </nav>
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading">Autres Pages</div>
+                    <a class="nav-link" href="{% url 'mercato' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                        Mercato
+                    </a>
+                    <a class="nav-link" href="{% url 'business' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        Business
+                    </a>
+                </div>
+            </div>
+        </nav>
     </div>
-    <div id="layoutSidenav_content" class="bg-light py-5">
-      <div class="container">
-        <h1>Détail du Club</h1>
-        <div class="row mb-2">
-          <div class="col-md-6">
-            <input
-              type="text"
-              id="search"
-              class="form-control"
-              placeholder="Rechercher..."
-            />
-          </div>
-          <!-- Champ de filtrage par âge -->
-        </div>
-        <table class="table table-striped" id="dataTableClubs">
-          <thead>
-            <tr>
-              <th onclick="sortTable(0)">Joueur</th>
-              <th onclick="sortTable(1)">Profil créé en</th>
-              <th onclick="sortTable(2)">Profil créé par</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Vos données vont ici -->
-            {% for player in players %}
-            <tr>
-              <td>
-                <a href="{% url 'joueur' player.id %}" target="_blank">{{ player }}</a>
-              </td>
-              <td>
-                {{ player.created_time}}
-              </td>
-              <td>
-                {{ player.created_by }}
-              </td>
-              <td class="text-right">
-                <a class="btn btn-warning btn-sm" href="{% url 'update_player' player.id %}" role="button">Modifier</a>
-                <a class="btn btn-danger btn-sm" href="{% url 'delete_player' player.id %}" role="button">Supprimer</a>
-              </td>
-            </tr>
-            {% endfor %}
-            <!-- Ajoutez plus de lignes de données ici -->
-          </tbody>
-        </table>
-        <table class="table table-striped" id="dataTableClubs">
-          <thead>
-            <tr>
-              <th onclick="sortTable(0)">Demandes du club</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Vos données vont ici -->
-            {% for busi in Business %}
-            <tr>
-              <td><a>{{busi}}</a></td>
-            </tr>
-            {% endfor %}
-            <!-- Ajoutez plus de lignes de données ici -->
-          </tbody>
-        </table>    
-      </div>
-      <script>
-      </script>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">{{ club.Club }}  <a class="btn btn-danger btn-sm" href="{% url 'delete_club' club.id %}" role="button">Supprimer le club</a></h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active">Club</li>
+                </ol>
+                <div class="row">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card bg-primary text-white mb-4">
+                            <div class="card-body">{{ club.rating }}</div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a class="small text-white stretched-link" href="#" target="_blank">Note Totale</a>
+                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card bg-warning text-white mb-4">
+                            <div class="card-body">{{ club.actual }}</div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a>Note Sportive</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card bg-success text-white mb-4">
+                            <div class="card-body">{{ club.financial }}</div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a>Note Financière</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card bg-danger text-white mb-4">
+                            <div class="card-body">{{ club.parent_club }}</div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a>Club Parent</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-chart-area me-1"></i>
+                                Informations Générales    <a class="btn btn-warning btn-sm" href="{% url 'update_club' club.id %}" target="_blank">Modifier</a>
+                            </div>
+                            <div class="card-body">
+                                <!-- Player Basic Info Table -->
+                                <table class="table table-striped" id="dataTableClubs">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <th>Pays</th>
+                                            <th>Championnat</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ club.Club }}</td>
+                                            <td>{{ club.country }}</td>
+                                            <td>{{ club.champ }}</td>
+                                        </tr>
+                                        <!-- Ajoutez plus de lignes ici si nécessaire -->
+                                    </tbody>
+                                </table></br>
+                                <!-- Player Physical Info Table -->
+                                <table class="table table-striped" id="dataTableClubs">
+                                    <thead>
+                                        <tr>
+                                            <th>Adresse</th>
+                                            <th>Téléphone</th>
+                                            <th>Actionnariat/Sponsors</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ club.address }}</td>
+                                            <td>{{ club.phone }}</td>
+                                            <td>{{ club.sponsors }}</td>
+                                        </tr>
+                                        <!-- Ajoutez plus de lignes ici si nécessaire -->
+                                    </tbody>
+                                </table></br>
+                                <!-- Player Rating Info Table -->
+                                <table class="table table-striped" id="dataTableClubs">
+                                    <thead>
+                                        <tr>
+                                            <th>Effectif</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                      {% for player in playas %}
+                                        <tr>
+                                            <td><a href="{% url 'joueur' player.id %}">{{ player }}</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                        <!-- Ajoutez plus de lignes ici si nécessaire -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-chart-bar me-1"></i>
+                                Staff <a class="btn btn-success btn-sm" href="{% url 'add_contact'%}" target="_blank">Ajouter un membre</a>
+                            </div>
+                            <div class="card-body">
+                                <!-- Player Reports Table -->
+                                <table class="table table-striped" id="dataTableRapports">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <th>Fonction</th>
+                                            <th>Téléphone</th>
+                                            <th>Mail</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for con in contact %}
+                                        <tr>
+                                            <td>{{ con.name }}</td>
+                                            <td>{{ con.situation }}</td>
+                                            <td>{{ con.phone }}</td>
+                                            <td>{{ con.email }}</td>
+                                            <td class="text-right"><a class="btn btn-warning btn-sm" href="{% url 'update_contact' con.id %}" role="button" target="_blank">Modifier</a></td>
+                                            <td class="text-right"><a class="btn btn-danger btn-sm" href="{% url 'delete_contact' con.id %}" role="button" target="_blank">Supprimer</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                        <!-- Ajoutez plus de lignes ici si nécessaire -->
+                                    </tbody>
+                                </table></br></br></br></br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-  </div>
+</div>
 {% endblock %}
+<script></script>

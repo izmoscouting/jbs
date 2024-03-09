@@ -70,7 +70,7 @@
   
           <div class="card bg-glass">
             <div class="card-body px-4 py-5 px-md-5">
-              <form method="POST" action="">
+              <form method="POST" style="max-width: 500px; max-height: 600px; overflow:auto;">
                   {% csrf_token %}
 
                   {{ form|crispy }}

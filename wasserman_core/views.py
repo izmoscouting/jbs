@@ -245,9 +245,9 @@ class PlayerAddWizard(SessionWizardView):
 def club(request,pk):
     cloub = Club.objects.get(id=pk)
     playas = Player.objects.filter(club_id=pk)
-    busi = Business.objects.filter(club_id=pk)
+    contact = Contact.objects.filter(club_id=pk)
 
-    return render(request, 'core/club.html',{'club':cloub,'players':playas, 'Business':busi})
+    return render(request, 'core/club.html',{'club':cloub,'playas':playas, 'contact':contact})
 
 @login_required()
 def joueur(request,pk):
@@ -483,23 +483,49 @@ class CoachAddWizard(SessionWizardView):
         return HttpResponseRedirect('/core/add_coach_success')
     
 
+def show_report_form(wizard):
+    cleaned_data = wizard.get_cleaned_data_for_step('0') or {}
+    return cleaned_data.get('bool_field_name')
+
 @method_login_required('dispatch')
 class AddReportWizard(SessionWizardView):
-    form_list = [ReportAddWizard1, ReportAddWizard2]
+    form_list = [ReportAddWizard1, PlayerAdd1, PlayerAdd3, PlayerAdd2, ReportAddWizard2]
     template_name = 'core/add_report.html'
-
+    condition_dict = {'1': show_report_form, '2': show_report_form, '3': show_report_form}  # Correction: Utilisez un dictionnaire correctement
+    
     def done(self, form_list, **kwargs):
         form_data = {}
-        for form in form_list:
-            form_data.update(form.cleaned_data)
+        player_data = {}
         
+        # Obtenez la réponse booléenne
+        bool_response = show_report_form(self)
+
+        for form in form_list:
+            # Si le formulaire est lié à Player, mettez à jour player_data
+            if isinstance(form, (PlayerAdd1, PlayerAdd2, PlayerAdd3)):
+                player_data.update(form.cleaned_data)
+            # Sinon, si le formulaire est lié à Report, mettez à jour form_data
+            elif isinstance(form, (ReportAddWizard1, ReportAddWizard2)):
+                cleaned_data = form.cleaned_data.copy()  # Créez une copie des données pour éviter de modifier les données originales du formulaire
+                if 'bool_field_name' in cleaned_data:
+                    del cleaned_data['bool_field_name']  # Supprimez le champ booléen
+                form_data.update(cleaned_data)
+
         form_data['created_by'] = self.request.user.username
         
-        # Créez une instance de Player avec les données combinées et sauvegardez-la
-        report = Report(**form_data)  # Assurez-vous que Player est correctement importé
+        # Créez une instance de Player uniquement si la réponse à la question booléenne est positive
+        if bool_response:
+            player = Player(**player_data)
+            player.save()
+            # Ajoutez l'instance de Player à form_data
+            form_data['player'] = player
+        
+        # Créez une instance de Report avec les données combinées et sauvegardez-la
+        report = Report(**form_data)
         report.save()
 
         # Marquez comme soumis dans la session une fois le formulaire traité avec succès
         self.request.session['submitted'] = True
-    
+
         return HttpResponseRedirect('/core/mercato')
+

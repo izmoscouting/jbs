@@ -54,6 +54,9 @@ class Club(models.Model):
     parent_club = models.CharField(max_length=150,default='Aucun')
     champ = models.CharField(max_length=150,default='Inconnu')
     country = models.CharField(max_length=150,default='Inconnu')
+    address = models.CharField(max_length=150,default='Inconnu')
+    phone = models.CharField(max_length=150,default='Inconnu')
+    sponsors = models.CharField(max_length=150,default='Inconnu')
     #coach = models.ForeignKey(Coach, on_delete=models.SET_NULL, null=True,default=None)
     coach = models.CharField(max_length=150,default='Inconnu')
     actual = models.CharField(max_length=10,default='R0')
@@ -91,6 +94,25 @@ class Club(models.Model):
     def __str__(self):
         return self.Club
 
+
+
+class Agency(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=225,default='Inconnu')
+    country = models.CharField(max_length=150,default='Inconnu')
+    city = models.CharField(max_length=150,default='Inconnu')
+    notes = models.CharField(max_length=2000,default='Inconnu')
+    web = models.CharField(max_length=150,default='Inconnu')
+    crea_by = models.CharField(max_length=150,null=True)
+    mod_by = models.CharField(max_length=150,blank=True)
+    date_crea = models.DateField(default=datetime.datetime.today,editable=False)
+    date_mod = models.DateField(default=datetime.datetime.today)
+    mod_by  = models.CharField(max_length=150,default=User,editable=False)
+    
+
+    def __str__(self):
+        return self.name
+    
 class Contact(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     first_name = models.CharField(max_length=50,default='Inconnu')
@@ -105,6 +127,7 @@ class Contact(models.Model):
     mod = models.CharField(max_length=150,default=User,editable=False)
     date_crea = models.DateField(default=datetime.datetime.today,editable=False)
     club_id = models.ForeignKey(Club, on_delete=models.SET_NULL, null=True,default=None)
+    agency_id = models.ForeignKey(Agency, on_delete=models.SET_NULL, null=True,default=None)
 
     def save(self, *args, **kwargs):
 
@@ -116,24 +139,6 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.last_name
-
-class Agency(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=225,default='Inconnu')
-    contact_id = models.ForeignKey(Contact, on_delete=models.SET_NULL, null=True,default=None)
-    country = models.CharField(max_length=150,default='Inconnu')
-    city = models.CharField(max_length=150,default='Inconnu')
-    notes = models.CharField(max_length=2000,default='Inconnu')
-    web = models.CharField(max_length=150,default='Inconnu')
-    crea_by = models.CharField(max_length=150,null=True)
-    mod_by = models.CharField(max_length=150,blank=True)
-    date_crea = models.DateField(default=datetime.datetime.today,editable=False)
-    date_mod = models.DateField(default=datetime.datetime.today)
-    mod_by  = models.CharField(max_length=150,default=User,editable=False)
-    
-
-    def __str__(self):
-        return self.name
 
 class Business(models.Model):
     name = models.CharField(max_length=150,default='Inconnu')

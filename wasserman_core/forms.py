@@ -37,7 +37,7 @@ class SignUpForm(UserCreationForm):
 class PlayerAdd1(forms.ModelForm):
     class Meta:
         model = Player
-        fields = ('last_name', 'first_name', 'birth', 'position', 'other_pos', 'club_id', 'foot', 'phone','size')
+        fields = ('last_name', 'first_name', 'birth', 'position', 'other_pos', 'club_id', 'foot','size','phone')
         widgets = {
             'birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
         }
@@ -107,18 +107,18 @@ class PlayerAdd2(ModelForm):
 
         help_texts = {'end_contract':'Mettre 30/06/année en cours si vous ne connaissez pas la date de fin',
                       'agence_id':'Cliquez sur \'Agences\' et rajoutez le si l\'agence du joueur manque.',
-                      'contact':'Cliquez sur \'Contacts\' et rajoutez le si le contact du joueur manque.',}
+                      'contact':'Cliquez sur \'Contacts\' et rajoutez le si l\'agent du joueur manque.',}
 # Sous-formulaire pour l'étape 3
 class PlayerAdd3(ModelForm):
     class Meta:
         model = Player
-        fields = ( 'transfermarkt', 'potential', 'note_actuel', 'note_financ','comment')
+        fields = ( 'transfermarkt','note_financ','comment')
 
         widgets = {
             'phone': forms.NumberInput(attrs={'class': 'form-control'})
         }
 
-        help_texts = {'comment':'Décrivez le joueur en mots clés, ex:\'Créatif, Rapide, Finisseur...\'','agence_id':'Cliquez sur \'Agence\' et rajoutez la si l\'agence du joueur manque.'}
+        help_texts = {'comment':'Décrivez le joueur en mots clés, ex:\'Créatif, Rapide, Finisseur...\''}
 
         labels = {
              'potential':'Note Potentielle',
@@ -157,6 +157,14 @@ class CoachAddWizard2(forms.ModelForm):
         }
 
 class ReportAddWizard1(forms.ModelForm):
+
+    bool_field_name = bool_field_name = forms.BooleanField(
+        label='Le joueur est absent de la BDD?', 
+        widget=forms.RadioSelect(choices=[(True, 'Oui'), (False, 'Non')]), 
+        initial=True,
+        required=False
+    )
+
     class Meta:
         model = Report
         fields = ('player','poste','contre','competition','date')
@@ -165,9 +173,27 @@ class ReportAddWizard1(forms.ModelForm):
         }
         labels = {
              'player':'Joueur',
+             'poste': 'Poste(s)',
             'contre':'Adversaire',            
         }
-        help_texts = {'contre':'Cliquez sur \'Clubs\' et rajoutez le si le club du joueur manque.'}
+        help_texts = {'contre':'Cliquez sur \'Clubs\' et rajoutez le si le club de l\'adversaire manque.'}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        unique_positions = set(Player.objects.values_list('position', flat=True))
+        unique_positions = [(pos, pos) for pos in unique_positions if pos]  # Exclure les positions vides
+        unique_positions.sort(key=lambda x: x[1])
+
+        # Rendre le champ player non obligatoire
+        self.fields['player'].required = False
+        self.fields['poste'] = forms.MultipleChoiceField(
+            label=self.Meta.labels['poste'],
+            choices=unique_positions,
+            required=True,
+            widget=forms.SelectMultiple(attrs={'class': 'form-control'})
+        )
+
+
 
 class ReportAddWizard2(forms.ModelForm):
     class Meta:
@@ -225,35 +251,47 @@ class BusinessForm(forms.ModelForm):
 class ClubsForm(forms.ModelForm):
     class Meta:
         model = Club
-        fields = ['Club', 'champ', 'country', 'coach', 'actual','financial','commentaires']
+        fields = ['Club', 'champ', 'country', 'coach', 'phone' ,'address', 'sponsors','actual','financial','commentaires']
         labels = {
             'champ': 'Championnat',
             'country': 'Pays',
-            'actual': 'Note Actuelle',
+            'actual': 'Note Sportive',
             'financial': 'Note Financière',
+            'phone':'Téléphone',
+            'address':'Adresse',
+            'sponsors':'Actionnaire/Sponsors'
         }
 
 
 class AgencesForm(forms.ModelForm):
     class Meta:
         model = Agency
-        fields = ['name', 'contact_id', 'country', 'notes']
+        fields = ['name', 'country', 'notes']
         labels = {
             'name': 'Nom',
-            'contact_id':'Contacts',
             'country': 'Pays'
         }
 
 class ContactsForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['club_id'].required = False
+        self.fields['agency_id'].required = False
     class Meta:
         model = Contact
-        fields = ['last_name', 'first_name', 'phone', 'commentaires']
+        fields = ['last_name', 'first_name', 'phone','email','situation','club_id','agency_id' , 'commentaires']
         labels = {
             'last_name': 'Nom',
             'first_name': 'Prénom',
             'phone':'Téléphone',
+            'situation':'Fonction',
+            'club_id':'Club',
+            'agency_id':'Agence',
             'commentaires': 'Infos Complémentaires'
         }
+        help_texts={'club_id':'Ne pas remplir s\'il ne fait pas parti d\'un club',
+                    'agency_id':'Ne pas remplir s\'il ne fait pas parti d\'une agence'}
+        
 
 class ShortlistForm(forms.ModelForm):
     class Meta:
